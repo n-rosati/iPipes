@@ -11,6 +11,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Util;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -43,7 +44,7 @@ public class PipeBlock extends Block implements Waterloggable {
 
     public PipeBlock() {
         super(FabricBlockSettings.of(Material.GLASS)
-                                 .strength(0.5f, 0.5f)
+                                 .strength(0.6f, 0.6f)
                                  .nonOpaque());
 
         setDefaultState(this.stateManager.getDefaultState()
@@ -58,9 +59,16 @@ public class PipeBlock extends Block implements Waterloggable {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        // TODO: outline shape with connections
-//        VoxelShapes.union
-        return VoxelShapes.cuboid(4/16f, 4/16f, 4/16f, 1f - 4/16f, 1f - 4/16f, 1f - 4/16f);
+        VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
+
+        if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
+        if (state.get(SOUTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 16 / 16f));
+        if (state.get(EAST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1 - 4 / 16f, 4 / 16f, 4 / 16f, 16 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
+        if (state.get(WEST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0 / 16f, 4 / 16f, 4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
+        if (state.get(UP)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f, 16 / 16f, 1 - 4 / 16f));
+        if (state.get(DOWN)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 0 / 16f, 4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f));
+
+        return shape.simplify();
     }
 
     @Override
@@ -72,7 +80,9 @@ public class PipeBlock extends Block implements Waterloggable {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return makeConnections(ctx.getWorld(), ctx.getBlockPos())
-                .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+                .with(WATERLOGGED, ctx.getWorld()
+                                      .getFluidState(ctx.getBlockPos())
+                                      .getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -82,26 +92,34 @@ public class PipeBlock extends Block implements Waterloggable {
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        if (state.get(WATERLOGGED)) {world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));}
 
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
     /**
      * checks if the PipeBlock should connect to a neighbouring block
-     * @param world the world
-     * @param pos neighboring block
+     *
+     * @param world
+     *         the world
+     * @param pos
+     *         neighboring block
      * @return should the PipeBlock connect to the given neighbouring block
      */
     private boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
+        Block block = world.getBlockState(pos)
+                           .getBlock();
 
         return block instanceof PipeBlock || block instanceof AbstractChestBlock || world.getBlockEntity(pos) instanceof Inventory;
     }
 
-    /** checks each direction of a places PipeBlock to check if it should connect
-     * @param world the world
-     * @param pos position of a PipeBlock
+    /**
+     * checks each direction of a places PipeBlock to check if it should connect
+     *
+     * @param world
+     *         the world
+     * @param pos
+     *         position of a PipeBlock
      * @return BlockState with connections
      */
     private BlockState makeConnections(World world, BlockPos pos) {
