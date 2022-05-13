@@ -49,7 +49,7 @@ public class PipeBlock extends Block implements Waterloggable {
                                  .nonOpaque()
                                  .sounds(BlockSoundGroup.STONE));
 
-        setDefaultState(this.stateManager.getDefaultState()
+        setDefaultState(getStateManager().getDefaultState()
                                          .with(WATERLOGGED, false)
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
@@ -60,20 +60,6 @@ public class PipeBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
-
-        if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
-        if (state.get(SOUTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 16 / 16f));
-        if (state.get(EAST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1 - 4 / 16f, 4 / 16f, 4 / 16f, 16 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
-        if (state.get(WEST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0 / 16f, 4 / 16f, 4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
-        if (state.get(UP)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f, 16 / 16f, 1 - 4 / 16f));
-        if (state.get(DOWN)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 0 / 16f, 4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f));
-
-        return shape.simplify();
-    }
-
-    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED, NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
@@ -81,8 +67,31 @@ public class PipeBlock extends Block implements Waterloggable {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return makeConnections(ctx.getWorld(), ctx.getBlockPos())
-                .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        World world = ctx.getWorld();
+        BlockPos blockPos = ctx.getBlockPos();
+
+        return this.getDefaultState()
+                   .with(NORTH, isConnectable(world, blockPos.north()))
+                   .with(EAST, isConnectable(world, blockPos.east()))
+                   .with(SOUTH, isConnectable(world, blockPos.south()))
+                   .with(WEST, isConnectable(world, blockPos.west()))
+                   .with(UP, isConnectable(world, blockPos.up()))
+                   .with(DOWN, isConnectable(world, blockPos.down()))
+                   .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+    }
+
+    /**
+     * checks if the PipeBlock should connect to a neighbouring block
+     *
+     * @param world
+     *         the world
+     * @param pos
+     *         neighboring block
+     * @return should the PipeBlock connect to the given neighbouring block
+     */
+    private boolean isConnectable(WorldAccess world, BlockPos pos) {
+        Block block = world.getBlockState(pos).getBlock();
+        return block instanceof PipeBlock || block instanceof AbstractChestBlock || world.getBlockEntity(pos) instanceof Inventory;
     }
 
     @Override
@@ -97,43 +106,17 @@ public class PipeBlock extends Block implements Waterloggable {
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
-    /**
-     * checks if the PipeBlock should connect to a neighbouring block
-     *
-     * @param world
-     *         the world
-     * @param pos
-     *         neighboring block
-     * @return should the PipeBlock connect to the given neighbouring block
-     */
-    private boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos)
-                           .getBlock();
-
-        return block instanceof PipeBlock || block instanceof AbstractChestBlock || world.getBlockEntity(pos) instanceof Inventory;
-    }
-
-    /**
-     * checks each direction of a places PipeBlock to check if it should connect
-     *
-     * @param world
-     *         the world
-     * @param pos
-     *         position of a PipeBlock
-     * @return BlockState with connections
-     */
-    private BlockState makeConnections(World world, BlockPos pos) {
-        return this.getDefaultState()
-                   .with(NORTH, isConnectable(world, pos.north()))
-                   .with(EAST, isConnectable(world, pos.east()))
-                   .with(SOUTH, isConnectable(world, pos.south()))
-                   .with(WEST, isConnectable(world, pos.west()))
-                   .with(UP, isConnectable(world, pos.up()))
-                   .with(DOWN, isConnectable(world, pos.down()));
-    }
-
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
+
+        if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
+        if (state.get(SOUTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 16 / 16f));
+        if (state.get(EAST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1 - 4 / 16f, 4 / 16f, 4 / 16f, 16 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
+        if (state.get(WEST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0 / 16f, 4 / 16f, 4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
+        if (state.get(UP)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f, 16 / 16f, 1 - 4 / 16f));
+        if (state.get(DOWN)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 0 / 16f, 4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f));
+
+        return shape.simplify();
     }
 }
