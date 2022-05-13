@@ -6,6 +6,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -45,7 +46,8 @@ public class PipeBlock extends Block implements Waterloggable {
     public PipeBlock() {
         super(FabricBlockSettings.of(Material.GLASS)
                                  .strength(0.6f, 0.6f)
-                                 .nonOpaque());
+                                 .nonOpaque()
+                                 .sounds(BlockSoundGroup.STONE));
 
         setDefaultState(this.stateManager.getDefaultState()
                                          .with(WATERLOGGED, false)
@@ -80,9 +82,7 @@ public class PipeBlock extends Block implements Waterloggable {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return makeConnections(ctx.getWorld(), ctx.getBlockPos())
-                .with(WATERLOGGED, ctx.getWorld()
-                                      .getFluidState(ctx.getBlockPos())
-                                      .getFluid() == Fluids.WATER);
+                .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
