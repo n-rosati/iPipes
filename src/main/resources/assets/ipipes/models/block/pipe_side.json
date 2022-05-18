@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "pipe",
+	"parent": "ipipes:block/pipe_frame",
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "ipipes:block/pipe_side",
