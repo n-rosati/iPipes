@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "ipipes:block/pipe_frame",
+	"parent": "ipipes:block/pipe/pipe_frame",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "ipipes:block/pipe_side",
-		"particle": "ipipes:block/pipe_side"
+		"0": "ipipes:block/pipe/pipe_side",
+		"particle": "ipipes:block/pipe/pipe_side"
 	},
 	"elements": [
 		{

@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "ipipes:block/pipe_frame"
+        "model": "ipipes:block/pipe/pipe_frame"
       }
     },
     {
@@ -10,7 +10,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side"
+        "model": "ipipes:block/pipe/pipe_side"
       }
     },
     {
@@ -18,7 +18,7 @@
         "north": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass"
+        "model": "ipipes:block/pipe/pipe_glass"
       }
     },
     {
@@ -26,7 +26,7 @@
         "south": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side",
+        "model": "ipipes:block/pipe/pipe_side",
         "y": 180
       }
     },
@@ -35,7 +35,7 @@
         "south": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass",
+        "model": "ipipes:block/pipe/pipe_glass",
         "y": 180
       }
     },
@@ -44,7 +44,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side",
+        "model": "ipipes:block/pipe/pipe_side",
         "y": 90
       }
     },
@@ -53,7 +53,7 @@
         "east": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass",
+        "model": "ipipes:block/pipe/pipe_glass",
         "y": 90
       }
     },
@@ -62,7 +62,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side",
+        "model": "ipipes:block/pipe/pipe_side",
         "y": 270
       }
     },
@@ -71,7 +71,7 @@
         "west": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass",
+        "model": "ipipes:block/pipe/pipe_glass",
         "y": 270
       }
     },
@@ -80,7 +80,7 @@
         "up": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side",
+        "model": "ipipes:block/pipe/pipe_side",
         "x": 270
       }
     },
@@ -89,7 +89,7 @@
         "up": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass",
+        "model": "ipipes:block/pipe/pipe_glass",
         "x": 270
       }
     },
@@ -98,7 +98,7 @@
         "down": "true"
       },
       "apply": {
-        "model": "ipipes:block/pipe_side",
+        "model": "ipipes:block/pipe/pipe_side",
         "x": 90
       }
     },
@@ -107,7 +107,7 @@
         "down": "false"
       },
       "apply": {
-        "model": "ipipes:block/pipe_glass",
+        "model": "ipipes:block/pipe/pipe_glass",
         "x": 90
       }
     }

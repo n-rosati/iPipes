@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "ipipes:block/pipe_frame",
-		"particle": "ipipes:block/pipe_frame"
+		"0": "ipipes:block/pipe/pipe_frame",
+		"particle": "ipipes:block/pipe/pipe_frame"
 	},
 	"elements": [
 		{
