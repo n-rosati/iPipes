@@ -31,13 +31,9 @@ public class iPipes implements ModInitializer {
 
         Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "pipe"), PIPE_BLOCK);
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, "pipe"), PIPE_BLOCK_ITEM);
-        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0x4f4f4f, PIPE_BLOCK);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0x4f4f4f, PIPE_BLOCK_ITEM);
 
         Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "supplier_pipe"), SUPPLIER_PIPE_BLOCK);
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, "supplier_pipe"), SUPPLIER_PIPE_BLOCK_ITEM);
-        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0x3495eb, SUPPLIER_PIPE_BLOCK);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0x3495eb, SUPPLIER_PIPE_BLOCK_ITEM);
 
         LOGGER.info("Init finished");
     }
