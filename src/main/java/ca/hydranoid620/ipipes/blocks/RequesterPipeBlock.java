@@ -9,16 +9,16 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
 @SuppressWarnings("deprecation")
-public class SupplierPipeBlock extends PipeBlock {
+public class RequesterPipeBlock extends PipeBlock {
     @Override
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
         Block block = world.getBlockState(pos).getBlock();
-        return (super.isConnectable(world, pos) && !(block instanceof SupplierPipeBlock)) ||
+        return (super.isConnectable(world, pos) && !(block instanceof RequesterPipeBlock)) ||
                 world.getBlockEntity(pos) instanceof Inventory;
     }
 
     /**
-     * Only allow {@link SupplierPipeBlock} to connect to {@link Inventory}
+     * Only allow {@link RequesterPipeBlock} to connect to {@link Inventory}
      * @param state block state
      * @param world the world
      * @param pos position trying to place at
