@@ -78,12 +78,9 @@ public class PipeBlock extends Block implements Waterloggable {
     }
 
     /**
-     * checks if the PipeBlock should connect to a neighbouring block
-     *
-     * @param world
-     *         the world
-     * @param pos
-     *         neighboring block
+     * checks if the {@link PipeBlock} should connect to a neighbouring block
+     * @param world the world
+     * @param pos block
      * @return should the PipeBlock connect to the given neighbouring block
      */
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {

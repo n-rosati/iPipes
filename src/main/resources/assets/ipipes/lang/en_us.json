@@ -1,3 +1,4 @@
 {
-    "block.ipipes.pipe": "Pipe"
+    "block.ipipes.pipe": "Pipe",
+    "block.ipipes.supplier_pipe": "Supplier Pipe"
 }
