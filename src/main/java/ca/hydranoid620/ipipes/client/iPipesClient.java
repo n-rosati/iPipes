@@ -1,11 +1,11 @@
-package xyz.rosati.ipipes.client;
+package ca.hydranoid620.ipipes.client;
 
+import ca.hydranoid620.ipipes.iPipes;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.render.RenderLayer;
-import xyz.rosati.ipipes.iPipes;
 
 @Environment(EnvType.CLIENT)
 public class iPipesClient implements ClientModInitializer {

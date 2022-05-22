@@ -12,6 +12,11 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
+
+    // REI
+    maven { url "https://maven.shedaniel.me" }
+    // WTHIT
+    maven { url "https://maven.bai.lol" }
 }
 
 dependencies {
@@ -22,6 +27,13 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // REI
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+
+    // WTHIT
+    modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${wthit_version}"
+    modRuntimeOnly "lol.bai:badpackets:fabric-${badpackets_version}"
 }
 
 processResources {

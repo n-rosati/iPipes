@@ -11,10 +11,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "xyz.rosati.ipipes.client.iPipesClient"
+      "ca.hydranoid620.ipipes.client.iPipesClient"
     ],
     "main": [
-      "xyz.rosati.ipipes.iPipes"
+      "ca.hydranoid620.ipipes.iPipes"
     ]
   },
   "mixins": [

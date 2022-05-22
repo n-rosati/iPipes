@@ -1,18 +1,15 @@
-package xyz.rosati.ipipes.blocks.pipes;
+package ca.hydranoid620.ipipes.blocks;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.Util;
-import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -89,9 +86,9 @@ public class PipeBlock extends Block implements Waterloggable {
      *         neighboring block
      * @return should the PipeBlock connect to the given neighbouring block
      */
-    private boolean isConnectable(WorldAccess world, BlockPos pos) {
+    protected boolean isConnectable(WorldAccess world, BlockPos pos) {
         Block block = world.getBlockState(pos).getBlock();
-        return block instanceof PipeBlock || block instanceof AbstractChestBlock || world.getBlockEntity(pos) instanceof Inventory;
+        return block instanceof PipeBlock;
     }
 
     @Override
@@ -101,15 +98,19 @@ public class PipeBlock extends Block implements Waterloggable {
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) {world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));}
+        if (state.get(WATERLOGGED)) {
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
 
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        // Base frame
         VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
 
+        // Side connectors
         if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
         if (state.get(SOUTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 16 / 16f));
         if (state.get(EAST)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1 - 4 / 16f, 4 / 16f, 4 / 16f, 16 / 16f, 1 - 4 / 16f, 1 - 4 / 16f));
