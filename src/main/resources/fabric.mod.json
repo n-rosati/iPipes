@@ -3,10 +3,16 @@
   "id": "ipipes",
   "version": "${version}",
   "name": "iPipes",
-  "description": "",
-  "authors": [],
-  "contact": {},
-  "license": "MIT",
+  "description": "Smart, logistical pipes",
+  "authors": [
+    "Hydranoid620"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/ipipes",
+    "sources": "https://github.com/hydranoid620/iPipes",
+    "issues": "https://github.com/hydranoid620/iPipes/issues"
+  },
+  "license": "LGPL-3",
   "icon": "assets/iPipes/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -17,9 +23,7 @@
       "ca.hydranoid620.ipipes.iPipes"
     ]
   },
-  "mixins": [
-    "iPipes.mixins.json"
-  ],
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.14.5",
     "fabric": "*",
