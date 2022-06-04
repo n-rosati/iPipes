@@ -13,22 +13,27 @@ import static ca.hydranoid620.ipipes.iPipes.*;
 public class iPipesClient implements ClientModInitializer {
     private static final int PIPE_FRAME_COLOUR = 0x333333;
     private static final int PIPE_GLASS_COLOUR = 0x808080;
-    private static final int SUPPLIER_PIPE_COLOUR = 0xEF2142;
     private static final int REQUESTER_PIPE_COLOUR = 0x3495EB;
+    private static final int ACTIVE_SUPPLIER_PIPE_COLOUR = 0xEF2142;
+    private static final int PASSIVE_SUPPLIER_PIPE_COLOUR = 0xFF7D00;
 
     @Override
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(PIPE_BLOCK, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(SUPPLIER_PIPE_BLOCK, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(REQUESTER_PIPE_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ACTIVE_SUPPLIER_PIPE_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(PASSIVE_SUPPLIER_PIPE_BLOCK, RenderLayer.getTranslucent());
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? PIPE_FRAME_COLOUR : PIPE_GLASS_COLOUR, PIPE_BLOCK);
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> PIPE_FRAME_COLOUR, PIPE_BLOCK_ITEM);
 
-        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? SUPPLIER_PIPE_COLOUR : PIPE_GLASS_COLOUR, SUPPLIER_PIPE_BLOCK);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> SUPPLIER_PIPE_COLOUR, SUPPLIER_PIPE_BLOCK_ITEM);
-
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? REQUESTER_PIPE_COLOUR : PIPE_GLASS_COLOUR, REQUESTER_PIPE_BLOCK);
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> REQUESTER_PIPE_COLOUR, REQUESTER_PIPE_BLOCK_ITEM);
+
+        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? ACTIVE_SUPPLIER_PIPE_COLOUR : PIPE_GLASS_COLOUR, ACTIVE_SUPPLIER_PIPE_BLOCK);
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ACTIVE_SUPPLIER_PIPE_COLOUR, ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM);
+
+        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? PASSIVE_SUPPLIER_PIPE_COLOUR : PIPE_GLASS_COLOUR, PASSIVE_SUPPLIER_PIPE_BLOCK);
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> PASSIVE_SUPPLIER_PIPE_COLOUR, PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM);
     }
 }

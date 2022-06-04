@@ -1,5 +1,6 @@
 {
     "block.ipipes.pipe": "Pipe",
-    "block.ipipes.supplier_pipe": "Supplier Pipe",
-    "block.ipipes.requester_pipe": "Requester Pipe"
+    "block.ipipes.requester_pipe": "Requester Pipe",
+    "block.ipipes.active_supplier_pipe": "Active Supplier Pipe",
+    "block.ipipes.passive_supplier_pipe": "Passive Supplier Pipe"
 }

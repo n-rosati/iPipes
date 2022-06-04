@@ -1,6 +1,5 @@
 package ca.hydranoid620.ipipes.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.BlockPos;
@@ -12,8 +11,7 @@ import net.minecraft.world.WorldView;
 public class SupplierPipeBlock extends PipeBlock {
     @Override
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        return (super.isConnectable(world, pos) && !(block instanceof SupplierPipeBlock)) ||
+        return super.isConnectable(world, pos) ||
                 world.getBlockEntity(pos) instanceof Inventory;
     }
 

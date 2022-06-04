@@ -12,8 +12,7 @@ import net.minecraft.world.WorldView;
 public class RequesterPipeBlock extends PipeBlock {
     @Override
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        return (super.isConnectable(world, pos) && !(block instanceof RequesterPipeBlock)) ||
+        return super.isConnectable(world, pos) ||
                 world.getBlockEntity(pos) instanceof Inventory;
     }
 
