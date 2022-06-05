@@ -1,6 +1,6 @@
 package ca.hydranoid620.ipipes.blocks;
 
-@SuppressWarnings("depreciation")
+@SuppressWarnings("deprecation")
 public class ActiveSupplierPipeBlock extends SupplierPipeBlock{
 
 }

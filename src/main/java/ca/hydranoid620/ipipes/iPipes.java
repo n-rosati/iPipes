@@ -43,11 +43,12 @@ public class iPipes implements ModInitializer {
     public static final BlockItem PIPE_BLOCK_ITEM = new BlockItem(PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
     public static final RequesterPipeBlock REQUESTER_PIPE_BLOCK = new RequesterPipeBlock();
     public static final BlockItem REQUESTER_PIPE_BLOCK_ITEM = new BlockItem(REQUESTER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-
     public static final ActiveSupplierPipeBlock ACTIVE_SUPPLIER_PIPE_BLOCK = new ActiveSupplierPipeBlock();
     public static final BlockItem ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM = new BlockItem(ACTIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
     public static final PassiveSupplierPipeBlock PASSIVE_SUPPLIER_PIPE_BLOCK = new PassiveSupplierPipeBlock();
     public static final BlockItem PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM = new BlockItem(PASSIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
+    public static final StoragePipeBlock STORAGE_PIPE_BLOCK = new StoragePipeBlock();
+    public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
 
     @Override
     public void onInitialize() {
@@ -64,6 +65,9 @@ public class iPipes implements ModInitializer {
 
         Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "passive_supplier_pipe"), PASSIVE_SUPPLIER_PIPE_BLOCK);
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, "passive_supplier_pipe"), PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK);
+        Registry.register(Registry.ITEM, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK_ITEM);
 
         LOGGER.info("Init finished");
     }
