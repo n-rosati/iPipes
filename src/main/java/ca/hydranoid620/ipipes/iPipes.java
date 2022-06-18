@@ -61,6 +61,8 @@ public class iPipes implements ModInitializer {
     public static final BlockItem PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM = new BlockItem(PASSIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
     public static BlockEntityType<RequesterPipeBlockEntity> REQUESTER_PIPE_BLOCK_ENTITY;
 
+    public static final StoragePipeBlock STORAGE_PIPE_BLOCK = new StoragePipeBlock();
+    public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
 
     @Override
     public void onInitialize() {
@@ -89,6 +91,9 @@ public class iPipes implements ModInitializer {
         PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                                               MOD_ID + ":passive_supplier_pipe_block_entity",
                                               FabricBlockEntityTypeBuilder.create(PassiveSupplierPipeBlockEntity::new, PASSIVE_SUPPLIER_PIPE_BLOCK).build(null));
+
+        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK);
+        Registry.register(Registry.ITEM, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK_ITEM);
 
         LOGGER.info("Init finished");
     }
