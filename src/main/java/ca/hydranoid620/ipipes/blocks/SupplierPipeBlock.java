@@ -8,7 +8,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
 @SuppressWarnings("deprecation")
-public class SupplierPipeBlock extends PipeBlock {
+public abstract class SupplierPipeBlock extends PipeBlock {
     @Override
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
         return super.isConnectable(world, pos) ||

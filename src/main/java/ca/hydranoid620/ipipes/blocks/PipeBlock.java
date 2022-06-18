@@ -1,7 +1,12 @@
 package ca.hydranoid620.ipipes.blocks;
 
+import ca.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
+import ca.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -23,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class PipeBlock extends Block implements Waterloggable {
+public class PipeBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final BooleanProperty NORTH = BooleanProperty.of("north");
     public static final BooleanProperty SOUTH = BooleanProperty.of("south");
@@ -116,5 +121,21 @@ public class PipeBlock extends Block implements Waterloggable {
         if (state.get(DOWN)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 0 / 16f, 4 / 16f, 1 - 4 / 16f, 4 / 16f, 1 - 4 / 16f));
 
         return shape.simplify();
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new PipeBlockEntity(pos, state);
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
+        return BlockRenderType.MODEL;
+    }
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, iPipes.PIPE_BLOCK_ENTITY, PipeBlockEntity::tick);
     }
 }
