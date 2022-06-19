@@ -1,11 +1,21 @@
 package ca.hydranoid620.ipipes.blocks;
 
+import ca.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
+import ca.hydranoid620.ipipes.blocks.entities.RequesterPipeBlockEntity;
+import ca.hydranoid620.ipipes.blocks.entities.StoragePipeBlockEntity;
+import ca.hydranoid620.ipipes.iPipes;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
 public class StoragePipeBlock extends PipeBlock {
@@ -29,5 +39,22 @@ public class StoragePipeBlock extends PipeBlock {
                 return true;
 
         return false;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new StoragePipeBlockEntity(pos, state);
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, iPipes.STORAGE_PIPE_BLOCK_ENTITY, StoragePipeBlockEntity::tick);
     }
 }

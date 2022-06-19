@@ -1,10 +1,7 @@
 package ca.hydranoid620.ipipes;
 
 import ca.hydranoid620.ipipes.blocks.*;
-import ca.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
-import ca.hydranoid620.ipipes.blocks.entities.PassiveSupplierPipeBlockEntity;
-import ca.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
-import ca.hydranoid620.ipipes.blocks.entities.RequesterPipeBlockEntity;
+import ca.hydranoid620.ipipes.blocks.entities.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -63,6 +60,8 @@ public class iPipes implements ModInitializer {
 
     public static final StoragePipeBlock STORAGE_PIPE_BLOCK = new StoragePipeBlock();
     public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
+    public static BlockEntityType<StoragePipeBlockEntity> STORAGE_PIPE_BLOCK_ENTITY;
+
 
     @Override
     public void onInitialize() {
@@ -94,6 +93,9 @@ public class iPipes implements ModInitializer {
 
         Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK);
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, "storage_pipe"), STORAGE_PIPE_BLOCK_ITEM);
+        STORAGE_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                               MOD_ID + ":storage_pipe_block_entity",
+                                                               FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
 
         LOGGER.info("Init finished");
     }
