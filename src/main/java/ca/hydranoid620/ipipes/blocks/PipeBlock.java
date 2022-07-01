@@ -1,5 +1,6 @@
 package ca.hydranoid620.ipipes.blocks;
 
+import ca.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import ca.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
 import ca.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -7,6 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -14,7 +16,11 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -24,7 +30,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
@@ -36,7 +44,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty WEST = BooleanProperty.of("west");
     public static final BooleanProperty UP = BooleanProperty.of("up");
     public static final BooleanProperty DOWN = BooleanProperty.of("down");
-    public static final Map<Direction, BooleanProperty> PROP_MAP = Util.make(new HashMap<>(), map->{
+    public static final Map<Direction, BooleanProperty> PROP_MAP = Util.make(new HashMap<>(), map -> {
         map.put(Direction.NORTH, NORTH);
         map.put(Direction.SOUTH, SOUTH);
         map.put(Direction.EAST, EAST);
@@ -137,5 +145,28 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.PIPE_BLOCK_ENTITY, PipeBlockEntity::tick);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!(world.getBlockEntity(pos) instanceof ActiveSupplierPipeBlockEntity)) return ActionResult.SUCCESS;
+
+//        ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).setShouldRebuildPaths(true);
+        iPipes.LOGGER.info("Path: " + ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).getPathAsText());
+
+        return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    public List<Direction> getConnectedDirections(BlockState state) {
+        List<Direction> directions = new ArrayList<>(6);
+
+        if (state.get(NORTH)) directions.add(Direction.NORTH);
+        if (state.get(SOUTH)) directions.add(Direction.SOUTH);
+        if (state.get(EAST)) directions.add(Direction.EAST);
+        if (state.get(WEST)) directions.add(Direction.WEST);
+        if (state.get(UP)) directions.add(Direction.UP);
+        if (state.get(DOWN)) directions.add(Direction.DOWN);
+
+        return directions;
     }
 }
