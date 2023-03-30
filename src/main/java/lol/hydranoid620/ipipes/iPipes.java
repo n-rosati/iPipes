@@ -38,70 +38,73 @@ public class iPipes implements ModInitializer {
             return ParameterizedMessageFactory.INSTANCE.newMessage(PREFIX + message, params);
         }
     });
-    public static final ItemGroup IPIPES_GROUP = FabricItemGroupBuilder.build(
-            new Identifier(MOD_ID, "general"),
-            () -> new ItemStack(iPipes.PIPE_BLOCK));
+    public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "general"),
+                                                                            () -> new ItemStack(iPipes.PIPE_BLOCK));
+
 
     public static final String PIPE_BLOCK_ID = "pipe";
-    public static final PipeBlock PIPE_BLOCK = new PipeBlock();
-    public static final BlockItem PIPE_BLOCK_ITEM = new BlockItem(PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-    public static BlockEntityType<PipeBlockEntity> PIPE_BLOCK_ENTITY;
+    public static final PipeBlock PIPE_BLOCK = Registry.register(Registry.BLOCK,
+                                                                 new Identifier(MOD_ID, PIPE_BLOCK_ID),
+                                                                 new PipeBlock());
+    public static final BlockItem PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                      new Identifier(MOD_ID, PIPE_BLOCK_ID),
+                                                                      new BlockItem(PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<PipeBlockEntity> PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                         new Identifier(MOD_ID, PIPE_BLOCK_ID + "_be"),
+                                                                                         FabricBlockEntityTypeBuilder.create(PipeBlockEntity::new, PIPE_BLOCK).build(null));
+
 
     public static final String REQUESTER_PIPE_ID = "requester_pipe";
-    public static final RequesterPipeBlock REQUESTER_PIPE_BLOCK = new RequesterPipeBlock();
-    public static final BlockItem REQUESTER_PIPE_BLOCK_ITEM = new BlockItem(REQUESTER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-    public static BlockEntityType<PassiveSupplierPipeBlockEntity> PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY;
+    public static final RequesterPipeBlock REQUESTER_PIPE_BLOCK = Registry.register(Registry.BLOCK,
+                                                                                    new Identifier(MOD_ID, REQUESTER_PIPE_ID),
+                                                                                    new RequesterPipeBlock());
+    public static final BlockItem REQUESTER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                                new Identifier(MOD_ID, REQUESTER_PIPE_ID),
+                                                                                new BlockItem(REQUESTER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<RequesterPipeBlockEntity> REQUESTER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                            new Identifier(MOD_ID, REQUESTER_PIPE_ID + "_be"),
+                                                                                                            FabricBlockEntityTypeBuilder.create(RequesterPipeBlockEntity::new, REQUESTER_PIPE_BLOCK).build(null));
+
 
     public static final String ACTIVE_SUPPLIER_PIPE_ID = "active_supplier_pipe";
-    public static final ActiveSupplierPipeBlock ACTIVE_SUPPLIER_PIPE_BLOCK = new ActiveSupplierPipeBlock();
-    public static final BlockItem ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM = new BlockItem(ACTIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-    public static BlockEntityType<ActiveSupplierPipeBlockEntity> ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY;
+    public static final ActiveSupplierPipeBlock ACTIVE_SUPPLIER_PIPE_BLOCK = Registry.register(Registry.BLOCK,
+                                                                                               new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID),
+                                                                                               new ActiveSupplierPipeBlock());
+    public static final BlockItem ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                                      new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID),
+                                                                                      new BlockItem(ACTIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<ActiveSupplierPipeBlockEntity> ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                       new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID + "_be"),
+                                                                                                                       FabricBlockEntityTypeBuilder.create(ActiveSupplierPipeBlockEntity::new, ACTIVE_SUPPLIER_PIPE_BLOCK).build(null));
+
 
     public static final String PASSIVE_SUPPLIER_ID = "passive_supplier_pipe";
-    public static final PassiveSupplierPipeBlock PASSIVE_SUPPLIER_PIPE_BLOCK = new PassiveSupplierPipeBlock();
-    public static final BlockItem PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM = new BlockItem(PASSIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-    public static BlockEntityType<RequesterPipeBlockEntity> REQUESTER_PIPE_BLOCK_ENTITY;
+    public static final PassiveSupplierPipeBlock PASSIVE_SUPPLIER_PIPE_BLOCK = Registry.register(Registry.BLOCK,
+                                                                                                 new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID),
+                                                                                                 new PassiveSupplierPipeBlock());
+    public static final BlockItem PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                                       new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID),
+                                                                                       new BlockItem(PASSIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<PassiveSupplierPipeBlockEntity> PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                         new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID + "block_entity"),
+                                                                                                                         FabricBlockEntityTypeBuilder.create(PassiveSupplierPipeBlockEntity::new, PASSIVE_SUPPLIER_PIPE_BLOCK).build(null));
+
 
     public static final String STORAGE_PIPE_ID = "storage_pipe";
-    public static final StoragePipeBlock STORAGE_PIPE_BLOCK = new StoragePipeBlock();
-    public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(IPIPES_GROUP));
-    public static BlockEntityType<StoragePipeBlockEntity> STORAGE_PIPE_BLOCK_ENTITY;
+    public static final StoragePipeBlock STORAGE_PIPE_BLOCK = Registry.register(Registry.BLOCK,
+                                                                                new Identifier(MOD_ID, STORAGE_PIPE_ID),
+                                                                                new StoragePipeBlock());
+    public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                              new Identifier(MOD_ID, STORAGE_PIPE_ID),
+                                                                              new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<StoragePipeBlockEntity> STORAGE_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                        new Identifier(MOD_ID, STORAGE_PIPE_ID + "_be"),
+                                                                                                        FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
 
 
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public void onInitialize() {
         LOGGER.info("Init started");
-
-        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, PIPE_BLOCK_ID), PIPE_BLOCK);
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, PIPE_BLOCK_ID), PIPE_BLOCK_ITEM);
-        PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                              MOD_ID + ":" + PIPE_BLOCK_ID + "_block_entity",
-                                              FabricBlockEntityTypeBuilder.create(PipeBlockEntity::new, PIPE_BLOCK).build(null));
-
-        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, REQUESTER_PIPE_ID), REQUESTER_PIPE_BLOCK);
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, REQUESTER_PIPE_ID), REQUESTER_PIPE_BLOCK_ITEM);
-        REQUESTER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                              MOD_ID + ":" + REQUESTER_PIPE_ID + "_block_entity",
-                                              FabricBlockEntityTypeBuilder.create(RequesterPipeBlockEntity::new, REQUESTER_PIPE_BLOCK).build(null));
-
-        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID), ACTIVE_SUPPLIER_PIPE_BLOCK);
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID), ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM);
-        ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                              MOD_ID + ":" + ACTIVE_SUPPLIER_PIPE_ID + "_block_entity",
-                                                              FabricBlockEntityTypeBuilder.create(ActiveSupplierPipeBlockEntity::new, ACTIVE_SUPPLIER_PIPE_BLOCK).build(null));
-
-        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID), PASSIVE_SUPPLIER_PIPE_BLOCK);
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID), PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM);
-        PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                              MOD_ID + ":" + PASSIVE_SUPPLIER_ID + "block_entity",
-                                              FabricBlockEntityTypeBuilder.create(PassiveSupplierPipeBlockEntity::new, PASSIVE_SUPPLIER_PIPE_BLOCK).build(null));
-
-        Registry.register(Registry.BLOCK, new Identifier(MOD_ID, STORAGE_PIPE_ID), STORAGE_PIPE_BLOCK);
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, STORAGE_PIPE_ID), STORAGE_PIPE_BLOCK_ITEM);
-        STORAGE_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                               MOD_ID + ":" + STORAGE_PIPE_ID + "_block_entity",
-                                                               FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
 
         LOGGER.info("Init finished");
     }
