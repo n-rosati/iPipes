@@ -1,4 +1,4 @@
-package ca.hydranoid620.ipipes.routing;
+package lol.hydranoid620.ipipes.routing;
 
 import lombok.Getter;
 import lombok.Setter;

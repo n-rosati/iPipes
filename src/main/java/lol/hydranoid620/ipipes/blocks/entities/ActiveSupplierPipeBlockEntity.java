@@ -1,20 +1,18 @@
-package ca.hydranoid620.ipipes.blocks.entities;
+package lol.hydranoid620.ipipes.blocks.entities;
 
-import ca.hydranoid620.ipipes.blocks.PipeBlock;
-import ca.hydranoid620.ipipes.iPipes;
-import ca.hydranoid620.ipipes.routing.Node;
+import lol.hydranoid620.ipipes.blocks.PipeBlock;
+import lol.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.routing.Node;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ActiveSupplierPipeBlockEntity extends BlockEntity {
     @Getter

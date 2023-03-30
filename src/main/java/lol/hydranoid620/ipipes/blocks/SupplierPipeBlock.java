@@ -1,4 +1,4 @@
-package ca.hydranoid620.ipipes.blocks;
+package lol.hydranoid620.ipipes.blocks;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventory;

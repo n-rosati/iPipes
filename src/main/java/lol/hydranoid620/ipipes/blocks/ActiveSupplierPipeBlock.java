@@ -1,7 +1,7 @@
-package ca.hydranoid620.ipipes.blocks;
+package lol.hydranoid620.ipipes.blocks;
 
-import ca.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
-import ca.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
+import lol.hydranoid620.ipipes.iPipes;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

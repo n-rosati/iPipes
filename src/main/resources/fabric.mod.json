@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "ca.hydranoid620.ipipes.client.iPipesClient"
+      "lol.hydranoid620.ipipes.client.iPipesClient"
     ],
     "main": [
-      "ca.hydranoid620.ipipes.iPipes"
+      "lol.hydranoid620.ipipes.iPipes"
     ]
   },
   "mixins": [],

@@ -1,8 +1,7 @@
-package ca.hydranoid620.ipipes;
+package lol.hydranoid620.ipipes;
 
-import ca.hydranoid620.ipipes.blocks.*;
-import ca.hydranoid620.ipipes.blocks.entities.*;
-import net.fabricmc.api.Environment;
+import lol.hydranoid620.ipipes.blocks.*;
+import lol.hydranoid620.ipipes.blocks.entities.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -12,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.annotation.Debug;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

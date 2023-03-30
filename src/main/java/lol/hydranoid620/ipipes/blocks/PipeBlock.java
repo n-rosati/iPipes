@@ -1,8 +1,8 @@
-package ca.hydranoid620.ipipes.blocks;
+package lol.hydranoid620.ipipes.blocks;
 
-import ca.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
-import ca.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
-import ca.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
+import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
+import lol.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,7 +16,6 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
