@@ -17,12 +17,13 @@ public class Node {
         this.world = world;
         this.pos = pos;
         this.parent = parent;
+
     }
 
     public boolean checkIfVisited(BlockPos source) {
         Node node = this;
         while (node != null) {
-            if (node.getPos() == source) return true; //unsure if this is the right way to compare blockpos
+            if (node.getPos().compareTo(source) == 0) return true; //unsure if this is the right way to compare blockpos
             node = node.getParent();
         }
 

@@ -29,7 +29,7 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity {
 
         if (be.isShouldRebuildPaths()) {
             be.clearNetworkConnections();
-            be.rebuildPaths();
+            be.buildPaths();
         }
     }
 
@@ -37,24 +37,31 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity {
         this.networkConnections.clear();
     }
 
-    public void rebuildPaths() {
-        World world = Objects.requireNonNull(this.getWorld());
+    public void buildPaths() {
+        World world = this.getWorld();
+        if (world == null) return;
 
-        Node node = new Node(world, this.getPos(), null);
-        Node newNode;
+        Node head = new Node(world, this.getPos(), null);
+        Node currentNode = head;
+        Node prevNode = null;
         do {
-            BlockState bs = world.getBlockState(node.getPos());
-            if (!(bs.getBlock() instanceof PipeBlock)) break;
+            BlockEntity be = world.getBlockEntity(currentNode.getPos());
+            if (!(be instanceof PipeBlockEntity)) break;
 
-            newNode = new Node(world, node.getPos().add(((PipeBlock) bs.getBlock()).getConnectedDirections(bs).get(0).getOpposite().getVector()), node);
+            List<Direction> connections = PipeBlock.getConnectedDirections(world.getBlockState(be.getPos()));
+            for (var connection : connections) {
+                if (world.getBlockState(be.getPos().add(connection.getVector())).isOf(iPipes.PIPE_BLOCK) && (prevNode != null ? prevNode.getPos() : true) != be.getPos()){
+                    prevNode = currentNode;
+                    currentNode = new Node(world, currentNode.getPos().add(connection.getVector()), prevNode);
 
-            if (world.getBlockState(newNode.getPos()).getBlock() instanceof ChestBlock) break;
+                    if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
+                }
+            }
+            if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
+        } while (true);
 
-            node.setChild(newNode);
-            if (node.getParent() == null) networkConnections.add(node);
-
-            node = node.getChild();
-        } while (node != null);
+        networkConnections.clear();
+        networkConnections.add(head);
 
         setShouldRebuildPaths(false);
     }
