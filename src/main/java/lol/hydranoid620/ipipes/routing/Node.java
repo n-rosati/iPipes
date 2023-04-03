@@ -1,37 +1,42 @@
 package lol.hydranoid620.ipipes.routing;
 
+import lol.hydranoid620.ipipes.iPipes;
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class Node {
-    private World world;
     @Getter
     private BlockPos pos;
-    @Nullable @Setter @Getter
-    private Node parent, child;
+    @Getter
+    private iPipes.Types pipeType;
 
-    public Node(World world, BlockPos pos, @Nullable Node parent) {
-        this.world = world;
+    public Node(BlockPos pos, iPipes.Types pipeType) {
         this.pos = pos;
-        this.parent = parent;
-
-    }
-
-    public boolean checkIfVisited(BlockPos source) {
-        Node node = this;
-        while (node != null) {
-            if (node.getPos().compareTo(source) == 0) return true; //unsure if this is the right way to compare blockpos
-            node = node.getParent();
-        }
-
-        return false;
+        this.pipeType = pipeType;
     }
 
     @Override
     public String toString() {
-        return "NYI";
+        return pos.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (this == obj) return true;
+        if (obj.getClass() != this.getClass()) return false;
+
+        Node other = (Node) obj;
+        return pos.getX() == other.getPos().getX() &&
+                pos.getY() == other.getPos().getY() &&
+                pos.getZ() == other.getPos().getZ();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pos.getX(), pos.getY(), pos.getZ());
     }
 }

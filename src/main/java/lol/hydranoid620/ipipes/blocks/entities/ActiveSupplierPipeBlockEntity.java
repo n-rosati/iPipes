@@ -38,46 +38,47 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity {
     }
 
     public void buildPaths() {
-        World world = this.getWorld();
-        if (world == null) return;
-
-        Node head = new Node(world, this.getPos(), null);
-        Node currentNode = head;
-        Node prevNode = null;
-        do {
-            BlockEntity be = world.getBlockEntity(currentNode.getPos());
-            if (!(be instanceof PipeBlockEntity)) break;
-
-            List<Direction> connections = PipeBlock.getConnectedDirections(world.getBlockState(be.getPos()));
-            for (var connection : connections) {
-                if (world.getBlockState(be.getPos().add(connection.getVector())).isOf(iPipes.PIPE_BLOCK) && (prevNode != null ? prevNode.getPos() : true) != be.getPos()){
-                    prevNode = currentNode;
-                    currentNode = new Node(world, currentNode.getPos().add(connection.getVector()), prevNode);
-
-                    if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
-                }
-            }
-            if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
-        } while (true);
-
-        networkConnections.clear();
-        networkConnections.add(head);
-
-        setShouldRebuildPaths(false);
+//        World world = this.getWorld();
+//        if (world == null) return;
+//
+//        Node head = new Node(world, this.getPos(), null);
+//        Node currentNode = head;
+//        Node prevNode = null;
+//        do {
+//            BlockEntity be = world.getBlockEntity(currentNode.getPos());
+//            if (!(be instanceof PipeBlockEntity)) break;
+//
+//            List<Direction> connections = PipeBlock.getConnectedDirections(world.getBlockState(be.getPos()));
+//            for (var connection : connections) {
+//                if (world.getBlockState(be.getPos().add(connection.getVector())).isOf(iPipes.PIPE_BLOCK) && (prevNode != null ? prevNode.getPos() : true) != be.getPos()){
+//                    prevNode = currentNode;
+//                    currentNode = new Node(world, currentNode.getPos().add(connection.getVector()), prevNode);
+//
+//                    if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
+//                }
+//            }
+//            if (world.getBlockState(be.getPos()).isOf(iPipes.STORAGE_PIPE_BLOCK)) break;
+//        } while (true);
+//
+//        networkConnections.clear();
+//        networkConnections.add(head);
+//
+//        setShouldRebuildPaths(false);
     }
 
     public String getPathAsText() {
-        if (getNetworkConnections().size() == 0) return "[]";
-
-        StringBuilder sb = new StringBuilder("[");
-
-        Node node = getNetworkConnections().get(0);
-        do {
-            sb.append(node.getPos().toString());
-            sb.append(", ");
-            node = node.getChild();
-        } while (node != null);
-
-        return sb.append("]").toString();
+//        if (getNetworkConnections().size() == 0) return "[]";
+//
+//        StringBuilder sb = new StringBuilder("[");
+//
+//        Node node = getNetworkConnections().get(0);
+//        do {
+//            sb.append(node.getPos().toString());
+//            sb.append(", ");
+//            node = node.getChild();
+//        } while (node != null);
+//
+//        return sb.append("]").toString();
+        return "[NYI]";
     }
 }

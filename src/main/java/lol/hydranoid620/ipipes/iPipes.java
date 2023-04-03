@@ -108,4 +108,13 @@ public class iPipes implements ModInitializer {
 
         LOGGER.info("Init finished");
     }
+
+    // When changing pipe types, remember to also update PathFinder
+    public enum Types {
+        PIPE,
+        REQUESTER_PIPE,
+        ACTIVE_SUPPLIER_PIPE,
+        PASSIVE_PROVIDER_PIPE,
+        STORAGE_PIPE
+    }
 }
