@@ -169,4 +169,8 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
 
         return directions;
     }
+
+    public iPipes.Types getTypeEnum() {
+        return iPipes.Types.PIPE;
+    }
 }

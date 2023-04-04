@@ -55,4 +55,9 @@ public class RequesterPipeBlock extends PipeBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.REQUESTER_PIPE_BLOCK_ENTITY, RequesterPipeBlockEntity::tick);
     }
+
+    @Override
+    public iPipes.Types getTypeEnum() {
+        return iPipes.Types.REQUESTER_PIPE;
+    }
 }

@@ -2,6 +2,7 @@ package lol.hydranoid620.ipipes.blocks;
 
 import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.routing.GraphCreator;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -40,6 +41,8 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) return ActionResult.SUCCESS;
 
+        GraphCreator.generateGraph(pos, world);
+
         iPipes.LOGGER.info("Destinations: " + ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).getNetworkConnections().toString());
 
         return super.onUse(state, world, pos, player, hand, hit);
@@ -52,5 +55,10 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
         //TODO: Don't need to rebuild the whole network if adjacent storage is changing
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    @Override
+    public iPipes.Types getTypeEnum() {
+        return iPipes.Types.ACTIVE_SUPPLIER_PIPE;
     }
 }

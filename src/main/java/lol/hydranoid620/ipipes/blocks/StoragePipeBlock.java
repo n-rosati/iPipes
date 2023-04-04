@@ -55,4 +55,9 @@ public class StoragePipeBlock extends PipeBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.STORAGE_PIPE_BLOCK_ENTITY, StoragePipeBlockEntity::tick);
     }
+
+    @Override
+    public iPipes.Types getTypeEnum() {
+        return iPipes.Types.STORAGE_PIPE;
+    }
 }

@@ -29,4 +29,9 @@ public class PassiveSupplierPipeBlock extends SupplierPipeBlock{
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, PassiveSupplierPipeBlockEntity::tick);
     }
+
+    @Override
+    public iPipes.Types getTypeEnum() {
+        return iPipes.Types.PASSIVE_PROVIDER_PIPE;
+    }
 }
