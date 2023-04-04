@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.Stack;
 
 public class GraphCreator {
-    //TODO: given a node, build the pipe network graph using DFS
     public static Set<Node> generateGraph(BlockPos origin, World world) {
         HashSet<Node> nodes = new HashSet<>();
 
@@ -21,13 +20,12 @@ public class GraphCreator {
 
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
+            nodes.add(curr);
             for (Direction direction : Direction.values()) {
                 BlockPos neighbour = curr.getPos().add(direction.getVector());
                 if (world.getBlockState(neighbour).getBlock() instanceof PipeBlock) {
                     Node newCandidateNode = new Node(neighbour, getPipeTypeFromBlockPos(neighbour, world));
-                    if (!nodes.contains(newCandidateNode)) {
-                        nodesToTraverse.push(newCandidateNode);
-                    }
+                    if (!nodes.contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
         }
