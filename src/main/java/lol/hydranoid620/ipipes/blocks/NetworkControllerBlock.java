@@ -1,7 +1,6 @@
 package lol.hydranoid620.ipipes.blocks;
 
-import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
-import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
+import lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -9,13 +8,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
@@ -35,14 +32,16 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class PipeBlock extends BlockWithEntity implements Waterloggable {
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+public class NetworkControllerBlock extends BlockWithEntity {
     public static final BooleanProperty NORTH = BooleanProperty.of("north");
     public static final BooleanProperty SOUTH = BooleanProperty.of("south");
     public static final BooleanProperty EAST = BooleanProperty.of("east");
     public static final BooleanProperty WEST = BooleanProperty.of("west");
     public static final BooleanProperty UP = BooleanProperty.of("up");
     public static final BooleanProperty DOWN = BooleanProperty.of("down");
+
+    public static final EnumProperty<iPipes.Types> TYPES_ENUM_PROPERTY = EnumProperty.of("type", iPipes.Types.class);
+
     public static final Map<Direction, BooleanProperty> PROP_MAP = Util.make(new HashMap<>(), map -> {
         map.put(Direction.NORTH, NORTH);
         map.put(Direction.SOUTH, SOUTH);
@@ -52,14 +51,10 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
         map.put(Direction.DOWN, DOWN);
     });
 
-    public PipeBlock() {
-        super(FabricBlockSettings.of(Material.GLASS)
-                                 .strength(0.6f, 0.6f)
-                                 .nonOpaque()
-                                 .sounds(BlockSoundGroup.STONE));
+    public NetworkControllerBlock() {
+        super(FabricBlockSettings.of(Material.STONE));
 
         setDefaultState(getStateManager().getDefaultState()
-                                         .with(WATERLOGGED, false)
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
                                          .with(EAST, false)
@@ -70,7 +65,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
     @Nullable
@@ -85,39 +80,23 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
                    .with(SOUTH, isConnectable(world, blockPos.south()))
                    .with(WEST, isConnectable(world, blockPos.west()))
                    .with(UP, isConnectable(world, blockPos.up()))
-                   .with(DOWN, isConnectable(world, blockPos.down()))
-                   .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+                   .with(DOWN, isConnectable(world, blockPos.down()));
     }
 
-    /**
-     * checks if the {@link PipeBlock} should connect to a neighbouring block
-     * @param world the world
-     * @param pos block
-     * @return should the PipeBlock connect to the given neighbouring block
-     */
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
         Block block = world.getBlockState(pos).getBlock();
-        return block instanceof PipeBlock || block instanceof NetworkControllerBlock;
-    }
-
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return block instanceof PipeBlock;
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-        }
-
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         // Base frame
-        VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
+        VoxelShape shape = VoxelShapes.cuboid(2 / 16f, 2 / 16f, 2 / 16f, 1f - 2 / 16f, 1f - 2 / 16f, 1f - 2 / 16f);
 
         // Side connectors
         if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
@@ -133,7 +112,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PipeBlockEntity(pos, state);
+        return new NetworkControllerBlockEntity(pos, state);
     }
 
     @Override
@@ -141,19 +120,14 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
         // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
         return BlockRenderType.MODEL;
     }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, iPipes.PIPE_BLOCK_ENTITY, PipeBlockEntity::tick);
+        return checkType(type, iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, NetworkControllerBlockEntity::tick);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient || hand == Hand.OFF_HAND) return super.onUse(state, world, pos, player, hand, hit);
-
-        if ((world.getBlockEntity(pos) instanceof ActiveSupplierPipeBlockEntity)) iPipes.LOGGER.info("Path: " + ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).getPathAsText());;
-        //((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).setShouldRebuildPaths(true);
-        //Above should be done when a pipe connects to an inventory
-
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
@@ -168,9 +142,5 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
         if (state.get(DOWN)) directions.add(Direction.DOWN);
 
         return directions;
-    }
-
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.PIPE;
     }
 }

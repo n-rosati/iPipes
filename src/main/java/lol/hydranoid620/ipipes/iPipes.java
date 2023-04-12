@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,6 +103,16 @@ public class iPipes implements ModInitializer {
                                                                                                         FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
 
 
+    public static final String NETWORK_CONTROLLER_ID = "network_controller";
+    public static final NetworkControllerBlock NETWORK_CONTROLLER_BLOCK = Registry.register(Registry.BLOCK,
+                                                                                            new Identifier(MOD_ID, NETWORK_CONTROLLER_ID),
+                                                                                            new NetworkControllerBlock());
+    public static final BlockItem NETWORK_CONTROLLER_BLOCK_ITEM = Registry.register(Registry.ITEM,
+                                                                              new Identifier(MOD_ID, NETWORK_CONTROLLER_ID),
+                                                                              new BlockItem(NETWORK_CONTROLLER_BLOCK, new Item.Settings().group(ITEM_GROUP)));
+    public static BlockEntityType<NetworkControllerBlockEntity> NETWORK_CONTROLLER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                        new Identifier(MOD_ID, NETWORK_CONTROLLER_ID + "_be"),
+                                                                                                        FabricBlockEntityTypeBuilder.create(NetworkControllerBlockEntity::new, NETWORK_CONTROLLER_BLOCK).build(null));
     @Override
     public void onInitialize() {
         LOGGER.info("Init started");
@@ -110,11 +121,16 @@ public class iPipes implements ModInitializer {
     }
 
     // When changing pipe types, remember to also update PathFinder
-    public enum Types {
+    public enum Types implements StringIdentifiable {
         PIPE,
         REQUESTER_PIPE,
         ACTIVE_SUPPLIER_PIPE,
         PASSIVE_PROVIDER_PIPE,
-        STORAGE_PIPE
+        STORAGE_PIPE;
+
+        @Override
+        public String asString() {
+            return this.name();
+        }
     }
 }

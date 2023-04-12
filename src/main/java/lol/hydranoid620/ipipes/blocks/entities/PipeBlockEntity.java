@@ -23,7 +23,6 @@ public class PipeBlockEntity extends BlockEntity {
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-
         // val = tag.get...
     }
 
