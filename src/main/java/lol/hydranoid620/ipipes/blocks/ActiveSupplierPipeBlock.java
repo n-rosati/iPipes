@@ -2,17 +2,12 @@ package lol.hydranoid620.ipipes.blocks;
 
 import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
-import lol.hydranoid620.ipipes.routing.GraphCreator;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -35,17 +30,6 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, ActiveSupplierPipeBlockEntity::tick);
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) return ActionResult.SUCCESS;
-
-        GraphCreator.generateGraph(pos, world);
-
-        iPipes.LOGGER.info("Destinations: " + ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).getNetworkConnections().toString());
-
-        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
