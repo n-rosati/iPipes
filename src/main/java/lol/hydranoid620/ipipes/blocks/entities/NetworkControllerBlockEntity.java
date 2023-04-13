@@ -1,15 +1,21 @@
 package lol.hydranoid620.ipipes.blocks.entities;
 
 import lol.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.routing.GraphCreator;
+import lol.hydranoid620.ipipes.routing.Node;
+import lombok.Getter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Set;
+
 public class NetworkControllerBlockEntity extends BlockEntity {
-    // remember to call markDirty() when editing data
     private int ticksUntilAction = 10;
+    @Getter
+    private Set<Node> nodes;
 
     public NetworkControllerBlockEntity(BlockPos pos, BlockState state) {
         super(iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, pos, state);
@@ -29,7 +35,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
     public boolean shouldDoAction() {
         boolean retVal = false;
-        if (this.ticksUntilAction == 0) {
+        if (this.ticksUntilAction <= 0) {
             this.ticksUntilAction = 10;
             retVal = true;
         } else {
@@ -40,13 +46,29 @@ public class NetworkControllerBlockEntity extends BlockEntity {
         return retVal;
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, NetworkControllerBlockEntity be) {
-        if (world.isClient) return;
-
-        if (be.shouldDoAction()) {
-            //do things and stuff
-            iPipes.LOGGER.info("thing happened at " + pos);
-            be.markDirty();
-        }
+    private void findNodes(BlockPos pos, World world) {
+        this.nodes = GraphCreator.findAllNodesInNetwork(pos, world);
     }
+
+    public static void tick(World world, BlockPos pos, BlockState state, NetworkControllerBlockEntity be) {
+        if (world.isClient || !be.shouldDoAction()) return;
+
+        // gets all nodes in the pipe network connected to the network controller
+        if (be.getNodes() == null || be.getNodes().isEmpty()) be.findNodes(pos, world);
+
+
+        /*TODO:
+                - find all requesters
+                - find all active providers
+                - find all passive providers
+                - find all storages
+                - try to satisfy requesters with active providers
+                - try to satisfy requesters with passive providers
+                - excess active provider capacity goes to storage*/
+
+
+//        be.markDirty();
+    }
+
+
 }
