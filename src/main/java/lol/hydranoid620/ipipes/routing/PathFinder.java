@@ -11,27 +11,23 @@ public class PathFinder {
     @Getter
     private final World world;
     private final Map<iPipes.Types, Integer> weights = new Hashtable<>(); // weights of pipe types
-    private final Set<Node> nodes = new HashSet<>();
-    private final Set<Edge> edges = new HashSet<>();
+    private final Set<Node> nodes;
+    private final Set<Edge> edges;
     private final Map<Node, Integer> gScore = new HashMap<>(); // cost from start to node
     private final Map<Node, Integer> fScore = new HashMap<>(); // estimated cost from start to end through node
     private final Map<Node, Node> cameFrom = new HashMap<>(); // previous node in optimal path
 
-    public PathFinder(World world) {
+    public PathFinder(World world, Set<Node> nodes, Set<Edge> edges) {
         this.world = world;
+
         weights.put(iPipes.Types.PIPE, 1);
         weights.put(iPipes.Types.REQUESTER_PIPE, 5);
         weights.put(iPipes.Types.ACTIVE_SUPPLIER_PIPE, 10);
         weights.put(iPipes.Types.PASSIVE_PROVIDER_PIPE, 5);
         weights.put(iPipes.Types.STORAGE_PIPE, 1);
-    }
 
-    public void addNode(BlockPos pos, iPipes.Types pipeType) {
-        nodes.add(new Node(pos, pipeType));
-    }
-
-    public void addEdge(Node first, Node second) {
-        edges.add(new Edge(first, second, second.getPipeType()));
+        this.nodes = nodes;
+        this.edges = edges;
     }
 
     private int getCostStartToNode(Node node) {
