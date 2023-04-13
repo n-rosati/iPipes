@@ -65,7 +65,7 @@ public class GraphCreator {
 
         return edges;
     }
-    private static iPipes.Types getPipeTypeFromBlockPos(BlockPos pos, World world) {
+
     /**
      * Returns the heavier of two given pipes (as {@link Node}s)
      * @param a
@@ -76,12 +76,14 @@ public class GraphCreator {
         //TODO
         return iPipes.Types.PIPE;
     }
+
     /**
      * Finds the type of pipe at a given position in a world
      * @param pos {@link BlockPos} in the world
      * @param world {@link World} to check in
      * @return Type of pipe represented as an {@link iPipes.Types} enum. Will return null if the given position is not a valid pipe type
      */
+    private static iPipes.Types getPipeTypeFromBlockPos(BlockPos pos, World world) {
         Block block = world.getBlockState(pos).getBlock();
         if (!(block instanceof PipeBlock)) return null;
         return ((PipeBlock) block).getTypeEnum();
