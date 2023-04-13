@@ -19,24 +19,24 @@ public class GraphCreator {
      * @return A Set of unique {@link Node}s that are all connected in a pipe network
      */
     public static Set<Node> findAllNodesInNetwork(BlockPos origin, World world) {
-        HashSet<Node> nodes = new HashSet<>();
+        HashSet<Node> pipeNodes = new HashSet<>();
 
         Stack<Node> nodesToTraverse = new Stack<>();
-        nodesToTraverse.push(new Node(origin, getPipeTypeFromBlockPos(origin, world)));
+        nodesToTraverse.push(new Node(origin, 1));
 
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
-            nodes.add(curr);
+            pipeNodes.add(curr);
             for (Direction direction : Direction.values()) {
                 BlockPos neighbour = curr.getPos().add(direction.getVector());
                 if (world.getBlockState(neighbour).getBlock() instanceof PipeBlock) { //TODO: pipe networks connected through the network controller should be one network
-                    Node newCandidateNode = new Node(neighbour, getPipeTypeFromBlockPos(neighbour, world));
-                    if (!nodes.contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
+                    Node newCandidateNode = new Node(neighbour, 1);
+                    if (!pipeNodes.contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
         }
 
-        return nodes;
+        return pipeNodes;
     }
 
     /**
@@ -58,23 +58,12 @@ public class GraphCreator {
                 Node b = ((Node) nodes.toArray()[j]);
 
                 if (a.getPos().getManhattanDistance(b.getPos()) == 1) {
-                    edges.add(new Edge(a, b, getHeaviestPipe(a, b)));
+                    edges.add(new Edge(a, b));
                 }
             }
         }
 
         return edges;
-    }
-
-    /**
-     * Returns the heavier of two given pipes (as {@link Node}s)
-     * @param a
-     * @param b
-     * @return Heaviest weighted pipe
-     */
-    private static iPipes.Types getHeaviestPipe(Node a, Node b) {
-        //TODO
-        return iPipes.Types.PIPE;
     }
 
     /**
