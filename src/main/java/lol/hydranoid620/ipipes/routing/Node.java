@@ -3,32 +3,42 @@ package lol.hydranoid620.ipipes.routing;
 import lol.hydranoid620.ipipes.blocks.*;
 import lol.hydranoid620.ipipes.iPipes;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A pipe piece represented as a Node for use in a graph
  */
 @ToString
-public class Node implements Comparator<Node> {
+public class Node implements Cloneable {
+    @Getter
+    private World world;
     @Getter
     private BlockPos pos;
-    @Getter
-    private int cost;
+    @Getter @Setter @ToString.Exclude
+    private List<Node> shortestPath = new LinkedList<>();
+    @Getter @Setter
+    private int distance = Integer.MAX_VALUE;
+    @Getter @ToString.Exclude
+    Map<Node, Integer> adjacentNodes = new HashMap<>();
 
-    public Node(BlockPos pos, int cost) {
+    public Node(BlockPos pos, World world) {
         this.pos = pos;
-        this.cost = cost;
+        this.world = world;
     }
 
-    public iPipes.Types getTypeIn(World world) {
+    public void addDestination(Node destination, int distance) {
+        adjacentNodes.put(destination, distance);
+    }
+
+    public iPipes.Types getTypeInWorld() {
         //TODO: Make not ugly (O/C Principle)
-        Block block = world.getBlockState(this.getPos()).getBlock();
+        Block block = this.getWorld().getBlockState(this.getPos()).getBlock();
 
         if (block instanceof ActiveSupplierPipeBlock) {
             return iPipes.Types.ACTIVE_SUPPLIER_PIPE;
@@ -43,16 +53,6 @@ public class Node implements Comparator<Node> {
         }
 
         return null;
-    }
-
-    /**
-     * @param first First {@link Node} to compare
-     * @param second Second {@link Node} to compare
-     * @return +1 if first is more costly than second, -1 if second more costly than first, 0 if same cost
-     */
-    @Override
-    public int compare(Node first, Node second) {
-        return 0;
     }
 
     @Override

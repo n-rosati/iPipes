@@ -18,37 +18,34 @@ public class GraphCreator {
      * @param world The {@link World} to search in
      * @return A Set of unique {@link Node}s that are all connected in a pipe network
      */
-    public static Set<Node> findAllNodesInNetwork(BlockPos origin, World world) {
-        HashSet<Node> pipeNodes = new HashSet<>();
+    public static Graph findAllNodesInNetwork(BlockPos origin, World world) {
+        Graph graph = new Graph();
 
         Stack<Node> nodesToTraverse = new Stack<>();
-        nodesToTraverse.push(new Node(origin, 1));
+        nodesToTraverse.push(new Node(origin, world));
 
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
-            pipeNodes.add(curr);
+            graph.addNode(curr);
             for (Direction direction : Direction.values()) {
                 BlockPos neighbour = curr.getPos().add(direction.getVector());
                 if (world.getBlockState(neighbour).getBlock() instanceof PipeBlock) { //TODO: pipe networks connected through the network controller should be one network
-                    Node newCandidateNode = new Node(neighbour, 1);
-                    if (!pipeNodes.contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
+                    Node newCandidateNode = new Node(neighbour, world);
+                    if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
         }
 
-        return pipeNodes;
+        connectNodes(graph.getNodes());
+        return graph;
     }
 
     /**
      * Finds all adjacent pipes represented as a set of {@link Node}s
      * @param nodes Set of {@link Node}s to sort through
-     * @return A Set of {@link Edge}s
      */
-    public static Set<Edge> findEdges(Set<Node> nodes) {
+    private static void connectNodes(Set<Node> nodes) {
         //TODO: Improve
-        Set<Edge> edges = new HashSet<>();
-
-        if (nodes.size() < 2) return edges;
 
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < nodes.size(); j++) {
@@ -58,12 +55,11 @@ public class GraphCreator {
                 Node b = ((Node) nodes.toArray()[j]);
 
                 if (a.getPos().getManhattanDistance(b.getPos()) == 1) {
-                    edges.add(new Edge(a, b));
+                    a.addDestination(b, 1);
+                    b.addDestination(a, 1);
                 }
             }
         }
-
-        return edges;
     }
 
     /**

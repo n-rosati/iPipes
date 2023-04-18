@@ -126,11 +126,6 @@ public class NetworkControllerBlock extends BlockWithEntity {
         return checkType(type, iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, NetworkControllerBlockEntity::tick);
     }
 
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        return super.onUse(state, world, pos, player, hand, hit);
-    }
-
     public static List<Direction> getConnectedDirections(BlockState state) {
         List<Direction> directions = new ArrayList<>(6);
 
