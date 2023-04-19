@@ -69,7 +69,6 @@ public class NetworkControllerBlockEntity extends BlockEntity {
                 - try to satisfy requesters with passive providers
                 - excess active provider capacity goes to storage*/
 
-
 //        be.markDirty();
     }
 }
