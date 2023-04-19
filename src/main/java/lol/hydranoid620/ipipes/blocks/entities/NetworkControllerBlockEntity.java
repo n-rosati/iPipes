@@ -36,7 +36,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
     private void makeGraph() {
         this.graph = GraphCreator.findAllNodesInNetwork(this.getPos(), this.getWorld());
         //FIXME: the network controller *should* be the first item in the set, but needs to be checked
-        PathFinder.calculateShortestPathFromSource(this.graph, this.graph.getNodes().stream().filter(x -> x.getPos() == this.getPos()).findFirst().get());
+        this.graph = PathFinder.calculateShortestPathFromSource(this.graph, this.graph.getNodes().stream().filter(x -> x.getPos() == this.getPos()).findFirst().get());
     }
 
     public boolean shouldDoAction() {
