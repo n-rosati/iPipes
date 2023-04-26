@@ -9,14 +9,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NetworkControllerBlockEntity extends BlockEntity {
-    private int ticksUntilAction = 10;
+    private static final int ACTIONS_PER_SECOND = 2;
+    private int ticksUntilAction = 0;
     @Getter
     private Graph graph;
+    @Getter
+    private Map<iPipes.Types, List<Node>> connectedEndpoints = new HashMap<>();
 
     public NetworkControllerBlockEntity(BlockPos pos, BlockState state) {
         super(iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, pos, state);
@@ -35,14 +37,12 @@ public class NetworkControllerBlockEntity extends BlockEntity {
     }
     private void makeGraph() {
         this.graph = GraphCreator.findAllNodesInNetwork(this.getPos(), this.getWorld());
-        //FIXME: the network controller *should* be the first item in the set, but needs to be checked
-        this.graph = PathFinder.calculateShortestPathFromSource(this.graph, this.graph.getNodes().stream().filter(x -> x.getPos() == this.getPos()).findFirst().get());
     }
 
     public boolean shouldDoAction() {
         boolean retVal = false;
         if (this.ticksUntilAction <= 0) {
-            this.ticksUntilAction = 10;
+            this.ticksUntilAction = 20 / ACTIONS_PER_SECOND;
             retVal = true;
         } else {
             this.ticksUntilAction--;
