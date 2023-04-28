@@ -5,21 +5,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class PathFinder {
-    @Getter
-    private final World world;
-    private final Set<Node> nodes;
-    private final Set<Edge> edges;
-    private final PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-
-
-    public PathFinder(World world, Set<Node> nodes, Set<Edge> edges) {
-        this.world = world;
-
-        this.nodes = nodes;
-        this.edges = edges;
-    }
-
+public record PathFinder(@Getter World world) {
     public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
         source.setDistance(0);
 

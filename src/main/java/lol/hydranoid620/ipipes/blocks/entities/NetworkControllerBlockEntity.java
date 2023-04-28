@@ -16,7 +16,6 @@ import static lol.hydranoid620.ipipes.iPipes.Types.*;
 public class NetworkControllerBlockEntity extends BlockEntity {
     private static final int ACTIONS_PER_SECOND = 2;
     private int ticksUntilAction = 0;
-    private boolean networkGraphMade = false;
     private Graph graph;
     private final Map<Types, List<Node>> networkEndpoints = Map.of(
             ACTIVE_SUPPLIER_PIPE, new ArrayList<>(),

@@ -1,6 +1,5 @@
 package lol.hydranoid620.ipipes.blocks;
 
-import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -29,9 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
@@ -151,19 +148,6 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
 //        if (world.isClient || hand == Hand.OFF_HAND) return super.onUse(state, world, pos, player, hand, hit);
 //
         return super.onUse(state, world, pos, player, hand, hit);
-    }
-
-    public static List<Direction> getConnectedDirections(BlockState state) {
-        List<Direction> directions = new ArrayList<>(6);
-
-        if (state.get(NORTH)) directions.add(Direction.NORTH);
-        if (state.get(SOUTH)) directions.add(Direction.SOUTH);
-        if (state.get(EAST)) directions.add(Direction.EAST);
-        if (state.get(WEST)) directions.add(Direction.WEST);
-        if (state.get(UP)) directions.add(Direction.UP);
-        if (state.get(DOWN)) directions.add(Direction.DOWN);
-
-        return directions;
     }
 
     public iPipes.Types getTypeEnum() {
