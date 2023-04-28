@@ -148,12 +148,8 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient || hand == Hand.OFF_HAND) return super.onUse(state, world, pos, player, hand, hit);
-
-        if ((world.getBlockEntity(pos) instanceof ActiveSupplierPipeBlockEntity)) iPipes.LOGGER.info("Path: " + ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).getPathAsText());;
-        //((ActiveSupplierPipeBlockEntity) world.getBlockEntity(pos)).setShouldRebuildPaths(true);
-        //Above should be done when a pipe connects to an inventory
-
+//        if (world.isClient || hand == Hand.OFF_HAND) return super.onUse(state, world, pos, player, hand, hit);
+//
         return super.onUse(state, world, pos, player, hand, hit);
     }
 

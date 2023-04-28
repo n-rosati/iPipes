@@ -15,13 +15,13 @@ import java.util.*;
  * A pipe piece represented as a Node for use in a graph
  */
 @ToString
-public class Node implements Cloneable {
+public class Node {
     @Getter
     private World world;
     @Getter
     private BlockPos pos;
     @Getter @Setter @ToString.Exclude
-    private List<Node> shortestPath = new LinkedList<>();
+    private LinkedList<Node> shortestPath = new LinkedList<>();
     @Getter @Setter
     private int distance = Integer.MAX_VALUE;
     @Getter @ToString.Exclude

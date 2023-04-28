@@ -61,7 +61,7 @@ public class PathFinder {
         return lowestDistanceNode;
     }
 
-    private static void calculateMinimumDistance (Node evaluationNode, Integer edgeWeight, Node sourceNode) {
+    private static void calculateMinimumDistance(Node evaluationNode, Integer edgeWeight, Node sourceNode) {
         Integer sourceDistance = sourceNode.getDistance();
 
         if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
