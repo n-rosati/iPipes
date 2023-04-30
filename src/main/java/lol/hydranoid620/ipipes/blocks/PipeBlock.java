@@ -60,7 +60,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable {
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
                                          .with(EAST, false)
-                                         .with(SOUTH, false)
+                                         .with(WEST, false)
                                          .with(UP, false)
                                          .with(DOWN, false));
     }
