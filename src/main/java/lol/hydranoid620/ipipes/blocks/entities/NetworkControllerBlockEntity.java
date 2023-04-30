@@ -66,7 +66,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
     }
 
     private void createNetworkModel() {
-        this.graph = GraphCreator.findAllNodesInNetwork(this.getPos(), this.getWorld());
+        this.graph = Graph.create(this.getPos(), this.getWorld());
 
         findEndpoints();
     }
@@ -98,22 +98,22 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             var graph = controllerBE.getGraph();
             var endpoints = controllerBE.getNetworkEndpoints();
             for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
-                PathFinder.calculateShortestPathFromSource(graph, node);
+                PathFinder.calculatePathsFromNode(node);
                 controllerBE.getGraph().clearPath();
             }
 
             for (var node : endpoints.get(PASSIVE_PROVIDER_PIPE)) {
-                PathFinder.calculateShortestPathFromSource(graph, node);
+                PathFinder.calculatePathsFromNode(node);
                 controllerBE.getGraph().clearPath();
             }
 
             for (var node : endpoints.get(REQUESTER_PIPE)) {
-                PathFinder.calculateShortestPathFromSource(graph, node);
+                PathFinder.calculatePathsFromNode(node);
                 controllerBE.getGraph().clearPath();
             }
 
             for (var node : endpoints.get(STORAGE_PIPE)) {
-                PathFinder.calculateShortestPathFromSource(graph, node);
+                PathFinder.calculatePathsFromNode(node);
                 controllerBE.getGraph().clearPath();
             }
         }
