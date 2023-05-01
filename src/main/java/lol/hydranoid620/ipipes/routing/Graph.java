@@ -3,15 +3,13 @@ package lol.hydranoid620.ipipes.routing;
 import lol.hydranoid620.ipipes.blocks.NetworkControllerBlock;
 import lol.hydranoid620.ipipes.blocks.PipeBlock;
 import lombok.Getter;
+import net.minecraft.block.Block;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class Graph {
     @Getter
@@ -47,7 +45,9 @@ public class Graph {
             graph.addNode(curr);
             for (Direction direction : Direction.values()) {
                 BlockPos neighbour = curr.getPos().add(direction.getVector());
-                if (world.getBlockState(neighbour).getBlock() instanceof PipeBlock || world.getBlockState(neighbour).getBlock() instanceof NetworkControllerBlock) {
+                Block block = world.getBlockState(neighbour).getBlock();
+                if (block instanceof PipeBlock ||
+                    block instanceof NetworkControllerBlock) {
                     Node newCandidateNode = new Node(neighbour, world);
                     if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
@@ -72,8 +72,8 @@ public class Graph {
      */
     private static void connectNodes(Set<Node> nodes) {
         Node[] nodesArray = nodes.toArray(Node[]::new);
-        for (int i = 0; i < nodes.size(); i++) {
-            for (int j = 0; j < nodes.size(); j++) {
+        for (int i = 0; i < nodes.size() / 2; i++) {
+            for (int j = nodes.size() - 1; j > nodes.size() / 2; j--) {
                 if (i == j) continue;
 
                 Node a = nodesArray[i];
@@ -82,8 +82,6 @@ public class Graph {
                 if (a.getPos().getManhattanDistance(b.getPos()) == 1) {
                     a.addDestination(b, 1);
                     b.addDestination(a, 1);
-
-                    //FIXME: Node indices `i` and `j` have been processed, don't process `j` and `i`
                 }
             }
         }
