@@ -4,10 +4,12 @@ import lol.hydranoid620.ipipes.blocks.IPipeConnectable;
 import lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity;
 import lombok.Getter;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.Stack;
 
 public class Graph {
     @Getter
@@ -41,11 +43,10 @@ public class Graph {
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
             graph.addNode(curr);
-            for (Direction direction : Direction.values()) {
-                var neighbourPos = curr.getPos().add(direction.getVector());
-                var block = world.getBlockState(neighbourPos).getBlock();
-                if (block instanceof IPipeConnectable) {
-                    var newCandidateNode = new Node(neighbourPos, world);
+            var blockState = world.getBlockState(curr.getPos());
+            if (blockState.getBlock() instanceof IPipeConnectable) {
+                for (var direction : IPipeConnectable.getConnectedDirections(blockState)) {
+                    var newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
                     if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
