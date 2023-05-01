@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
 public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockEntityProvider {
     @Nullable
     @Override
@@ -22,11 +21,6 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
         return new ActiveSupplierPipeBlockEntity(pos, state);
     }
 
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
-        return BlockRenderType.MODEL;
-    }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, ActiveSupplierPipeBlockEntity::tick);

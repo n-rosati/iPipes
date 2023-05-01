@@ -1,6 +1,7 @@
 package lol.hydranoid620.ipipes.routing;
 
 import lol.hydranoid620.ipipes.blocks.IPipeConnectable;
+import lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity;
 import lombok.Getter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -27,7 +28,7 @@ public class Graph {
 
     /**
      * Traverse a pipe network to fina all connected pipes
-     * @param origin Starting point to search from. Typically a {@link lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity}
+     * @param origin Starting point to search from. Typically a {@link NetworkControllerBlockEntity}
      * @param world The {@link World} to search in
      * @return A Set of unique {@link Node}s that are all connected in a pipe network
      */

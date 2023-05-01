@@ -1,10 +1,13 @@
 package lol.hydranoid620.ipipes.blocks;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Direction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface IPipeConnectable {
@@ -22,4 +25,17 @@ public interface IPipeConnectable {
         map.put(Direction.UP, UP);
         map.put(Direction.DOWN, DOWN);
     });
+
+    static List<Direction> getConnectedDirections(BlockState state) {
+        List<Direction> directions = new ArrayList<>(6);
+
+        if (state.get(NORTH)) directions.add(Direction.NORTH);
+        if (state.get(SOUTH)) directions.add(Direction.SOUTH);
+        if (state.get(EAST)) directions.add(Direction.EAST);
+        if (state.get(WEST)) directions.add(Direction.WEST);
+        if (state.get(UP)) directions.add(Direction.UP);
+        if (state.get(DOWN)) directions.add(Direction.DOWN);
+
+        return directions;
+    }
 }

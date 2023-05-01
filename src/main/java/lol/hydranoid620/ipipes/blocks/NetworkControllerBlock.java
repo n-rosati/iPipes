@@ -114,17 +114,4 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, NetworkControllerBlockEntity::tick);
     }
-
-    public static List<Direction> getConnectedDirections(BlockState state) {
-        List<Direction> directions = new ArrayList<>(6);
-
-        if (state.get(NORTH)) directions.add(Direction.NORTH);
-        if (state.get(SOUTH)) directions.add(Direction.SOUTH);
-        if (state.get(EAST)) directions.add(Direction.EAST);
-        if (state.get(WEST)) directions.add(Direction.WEST);
-        if (state.get(UP)) directions.add(Direction.UP);
-        if (state.get(DOWN)) directions.add(Direction.DOWN);
-
-        return directions;
-    }
 }

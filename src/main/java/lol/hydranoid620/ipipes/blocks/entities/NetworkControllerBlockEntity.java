@@ -86,6 +86,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
     /************************/
 
+    @SuppressWarnings("unused")
     public static void tick(World world, BlockPos pos, BlockState state, NetworkControllerBlockEntity controllerBE) {
         if (world.isClient || !controllerBE.shouldDoAction()) return;
 
