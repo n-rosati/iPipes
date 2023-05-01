@@ -33,6 +33,7 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
         super(FabricBlockSettings.of(Material.STONE));
 
         setDefaultState(getStateManager().getDefaultState()
+                                         .with(WATERLOGGED, false)
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
                                          .with(EAST, false)
@@ -43,7 +44,7 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        builder.add(WATERLOGGED, NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
     @Nullable
@@ -58,7 +59,8 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
                    .with(SOUTH, isConnectable(world, blockPos.south()))
                    .with(WEST, isConnectable(world, blockPos.west()))
                    .with(UP, isConnectable(world, blockPos.up()))
-                   .with(DOWN, isConnectable(world, blockPos.down()));
+                   .with(DOWN, isConnectable(world, blockPos.down()))
+                   .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
@@ -67,7 +69,16 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
     }
 
     @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+    }
+
+    @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (state.get(WATERLOGGED)) {
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
