@@ -2,7 +2,6 @@ package lol.hydranoid620.ipipes.blocks;
 
 import lol.hydranoid620.ipipes.blocks.entities.StoragePipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -43,12 +42,6 @@ public class StoragePipeBlock extends PipeBlock {
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new StoragePipeBlockEntity(pos, state);
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
-        return BlockRenderType.MODEL;
     }
 
     @Override

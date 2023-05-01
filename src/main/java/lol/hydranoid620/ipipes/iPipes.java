@@ -50,9 +50,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                       new Identifier(MOD_ID, PIPE_BLOCK_ID),
                                                                       new BlockItem(PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<PipeBlockEntity> PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                         new Identifier(MOD_ID, PIPE_BLOCK_ID + "_be"),
-                                                                                         FabricBlockEntityTypeBuilder.create(PipeBlockEntity::new, PIPE_BLOCK).build(null));
+    public static final BlockEntityType<PipeBlockEntity> PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                               new Identifier(MOD_ID, PIPE_BLOCK_ID + "_be"),
+                                                                                               FabricBlockEntityTypeBuilder.create(PipeBlockEntity::new, PIPE_BLOCK).build(null));
 
 
     public static final String REQUESTER_PIPE_ID = "requester_pipe";
@@ -62,9 +62,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem REQUESTER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                                 new Identifier(MOD_ID, REQUESTER_PIPE_ID),
                                                                                 new BlockItem(REQUESTER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<RequesterPipeBlockEntity> REQUESTER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                                            new Identifier(MOD_ID, REQUESTER_PIPE_ID + "_be"),
-                                                                                                            FabricBlockEntityTypeBuilder.create(RequesterPipeBlockEntity::new, REQUESTER_PIPE_BLOCK).build(null));
+    public static final BlockEntityType<RequesterPipeBlockEntity> REQUESTER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                  new Identifier(MOD_ID, REQUESTER_PIPE_ID + "_be"),
+                                                                                                                  FabricBlockEntityTypeBuilder.create(RequesterPipeBlockEntity::new, REQUESTER_PIPE_BLOCK).build(null));
 
 
     public static final String ACTIVE_SUPPLIER_PIPE_ID = "active_supplier_pipe";
@@ -74,9 +74,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem ACTIVE_SUPPLIER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                                       new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID),
                                                                                       new BlockItem(ACTIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<ActiveSupplierPipeBlockEntity> ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                                                       new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID + "_be"),
-                                                                                                                       FabricBlockEntityTypeBuilder.create(ActiveSupplierPipeBlockEntity::new, ACTIVE_SUPPLIER_PIPE_BLOCK).build(null));
+    public static final BlockEntityType<ActiveSupplierPipeBlockEntity> ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                             new Identifier(MOD_ID, ACTIVE_SUPPLIER_PIPE_ID + "_be"),
+                                                                                                                             FabricBlockEntityTypeBuilder.create(ActiveSupplierPipeBlockEntity::new, ACTIVE_SUPPLIER_PIPE_BLOCK).build(null));
 
 
     public static final String PASSIVE_SUPPLIER_ID = "passive_supplier_pipe";
@@ -86,9 +86,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem PASSIVE_SUPPLIER_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                                        new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID),
                                                                                        new BlockItem(PASSIVE_SUPPLIER_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<PassiveSupplierPipeBlockEntity> PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                                                         new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID + "block_entity"),
-                                                                                                                         FabricBlockEntityTypeBuilder.create(PassiveSupplierPipeBlockEntity::new, PASSIVE_SUPPLIER_PIPE_BLOCK).build(null));
+    public static final BlockEntityType<PassiveSupplierPipeBlockEntity> PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                               new Identifier(MOD_ID, PASSIVE_SUPPLIER_ID + "block_entity"),
+                                                                                                                               FabricBlockEntityTypeBuilder.create(PassiveSupplierPipeBlockEntity::new, PASSIVE_SUPPLIER_PIPE_BLOCK).build(null));
 
 
     public static final String STORAGE_PIPE_ID = "storage_pipe";
@@ -98,9 +98,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem STORAGE_PIPE_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                               new Identifier(MOD_ID, STORAGE_PIPE_ID),
                                                                               new BlockItem(STORAGE_PIPE_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<StoragePipeBlockEntity> STORAGE_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                                        new Identifier(MOD_ID, STORAGE_PIPE_ID + "_be"),
-                                                                                                        FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
+    public static final BlockEntityType<StoragePipeBlockEntity> STORAGE_PIPE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                              new Identifier(MOD_ID, STORAGE_PIPE_ID + "_be"),
+                                                                                                              FabricBlockEntityTypeBuilder.create(StoragePipeBlockEntity::new, STORAGE_PIPE_BLOCK).build(null));
 
 
     public static final String NETWORK_CONTROLLER_ID = "network_controller";
@@ -110,9 +110,9 @@ public class iPipes implements ModInitializer {
     public static final BlockItem NETWORK_CONTROLLER_BLOCK_ITEM = Registry.register(Registry.ITEM,
                                                                               new Identifier(MOD_ID, NETWORK_CONTROLLER_ID),
                                                                               new BlockItem(NETWORK_CONTROLLER_BLOCK, new Item.Settings().group(ITEM_GROUP)));
-    public static BlockEntityType<NetworkControllerBlockEntity> NETWORK_CONTROLLER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                                                                                                        new Identifier(MOD_ID, NETWORK_CONTROLLER_ID + "_be"),
-                                                                                                        FabricBlockEntityTypeBuilder.create(NetworkControllerBlockEntity::new, NETWORK_CONTROLLER_BLOCK).build(null));
+    public static final BlockEntityType<NetworkControllerBlockEntity> NETWORK_CONTROLLER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                                                                                                                          new Identifier(MOD_ID, NETWORK_CONTROLLER_ID + "_be"),
+                                                                                                                          FabricBlockEntityTypeBuilder.create(NetworkControllerBlockEntity::new, NETWORK_CONTROLLER_BLOCK).build(null));
     @Override
     public void onInitialize() {
         LOGGER.info("Init started");

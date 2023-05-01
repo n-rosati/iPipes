@@ -95,6 +95,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
          *        - call getShortestPath() on target node to get the path from source as a linked list
          *        - call clearPath() on the graph to reset it*/
         boolean t = false;
+        //noinspection All
         if (t) {
             var graph = controllerBE.getGraph();
             var endpoints = controllerBE.getNetworkEndpoints();
