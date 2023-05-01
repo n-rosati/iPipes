@@ -10,13 +10,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class ActiveSupplierPipeBlockEntity extends BlockEntity {
+public class ActiveSupplierPipeBlockEntity extends BlockEntity implements IPipeNetworkEndpoint {
     @Getter
     private final List<Node> networkConnections = new ArrayList<>();
     @Setter @Getter
     private boolean shouldRebuildPaths = true;
+    @Getter
+    private ArrayList<LinkedList<Node>> destinations = new ArrayList<>();
 
     public ActiveSupplierPipeBlockEntity(BlockPos pos, BlockState state) {
         super(iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, pos, state);

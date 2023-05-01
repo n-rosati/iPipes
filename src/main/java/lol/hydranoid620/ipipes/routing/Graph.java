@@ -21,7 +21,7 @@ public class Graph {
         nodes.add(node);
     }
 
-    public void clearPath() {
+    public void clearAllPaths() {
         for (var node : getNodes()) {
             node.setDistance(Integer.MAX_VALUE);
             node.setShortestPath(new LinkedList<>());

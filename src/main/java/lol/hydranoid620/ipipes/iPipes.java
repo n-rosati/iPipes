@@ -125,7 +125,7 @@ public class iPipes implements ModInitializer {
         PIPE,
         REQUESTER_PIPE,
         ACTIVE_SUPPLIER_PIPE,
-        PASSIVE_PROVIDER_PIPE,
+        PASSIVE_SUPPLIER_PIPE,
         STORAGE_PIPE;
 
         @Override
