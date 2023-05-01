@@ -7,16 +7,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -26,35 +22,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @SuppressWarnings("deprecation")
-public class NetworkControllerBlock extends BlockWithEntity {
-    public static final BooleanProperty NORTH = BooleanProperty.of("north");
-    public static final BooleanProperty SOUTH = BooleanProperty.of("south");
-    public static final BooleanProperty EAST = BooleanProperty.of("east");
-    public static final BooleanProperty WEST = BooleanProperty.of("west");
-    public static final BooleanProperty UP = BooleanProperty.of("up");
-    public static final BooleanProperty DOWN = BooleanProperty.of("down");
-
-    public static final EnumProperty<iPipes.Types> TYPES_ENUM_PROPERTY = EnumProperty.of("type", iPipes.Types.class);
-
-    public static final Map<Direction, BooleanProperty> PROP_MAP = Util.make(new HashMap<>(), map -> {
-        map.put(Direction.NORTH, NORTH);
-        map.put(Direction.SOUTH, SOUTH);
-        map.put(Direction.EAST, EAST);
-        map.put(Direction.WEST, WEST);
-        map.put(Direction.UP, UP);
-        map.put(Direction.DOWN, DOWN);
-    });
+public class NetworkControllerBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
+    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public NetworkControllerBlock() {
         super(FabricBlockSettings.of(Material.STONE));
 
         setDefaultState(getStateManager().getDefaultState()
+                                         .with(WATERLOGGED, false)
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
                                          .with(EAST, false)
@@ -65,7 +41,7 @@ public class NetworkControllerBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        builder.add(WATERLOGGED, NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
     @Nullable
@@ -80,7 +56,8 @@ public class NetworkControllerBlock extends BlockWithEntity {
                    .with(SOUTH, isConnectable(world, blockPos.south()))
                    .with(WEST, isConnectable(world, blockPos.west()))
                    .with(UP, isConnectable(world, blockPos.up()))
-                   .with(DOWN, isConnectable(world, blockPos.down()));
+                   .with(DOWN, isConnectable(world, blockPos.down()))
+                   .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
@@ -89,7 +66,16 @@ public class NetworkControllerBlock extends BlockWithEntity {
     }
 
     @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+    }
+
+    @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (state.get(WATERLOGGED)) {
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+
         return state.with(PROP_MAP.get(direction), isConnectable(world, neighborPos));
     }
 
@@ -124,18 +110,5 @@ public class NetworkControllerBlock extends BlockWithEntity {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, NetworkControllerBlockEntity::tick);
-    }
-
-    public static List<Direction> getConnectedDirections(BlockState state) {
-        List<Direction> directions = new ArrayList<>(6);
-
-        if (state.get(NORTH)) directions.add(Direction.NORTH);
-        if (state.get(SOUTH)) directions.add(Direction.SOUTH);
-        if (state.get(EAST)) directions.add(Direction.EAST);
-        if (state.get(WEST)) directions.add(Direction.WEST);
-        if (state.get(UP)) directions.add(Direction.UP);
-        if (state.get(DOWN)) directions.add(Direction.DOWN);
-
-        return directions;
     }
 }

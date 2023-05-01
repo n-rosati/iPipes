@@ -1,10 +1,9 @@
 package lol.hydranoid620.ipipes.routing;
 
-import lol.hydranoid620.ipipes.blocks.PipeBlock;
+import lol.hydranoid620.ipipes.blocks.IPipeConnectable;
+import lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity;
 import lombok.Getter;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -22,7 +21,7 @@ public class Graph {
         nodes.add(node);
     }
 
-    public void clearPaths() {
+    public void clearAllPaths() {
         for (var node : getNodes()) {
             node.setDistance(Integer.MAX_VALUE);
             node.setShortestPath(new LinkedList<>());
@@ -31,7 +30,7 @@ public class Graph {
 
     /**
      * Traverse a pipe network to fina all connected pipes
-     * @param origin Starting point to search from. Typically a {@link lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity}
+     * @param origin Starting point to search from. Typically a {@link NetworkControllerBlockEntity}
      * @param world The {@link World} to search in
      * @return A Set of unique {@link Node}s that are all connected in a pipe network
      */
@@ -44,10 +43,10 @@ public class Graph {
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
             graph.addNode(curr);
-
-            for (Direction direction : Direction.values()) {
-                if (world.getBlockState(curr.getPos()).get(BooleanProperty.of(direction.getName().toLowerCase()))) {
-                    Node newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
+            var blockState = world.getBlockState(curr.getPos());
+            if (blockState.getBlock() instanceof IPipeConnectable) {
+                for (var direction : IPipeConnectable.getConnectedDirections(blockState)) {
+                    var newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
                     if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
@@ -63,8 +62,8 @@ public class Graph {
      */
     private static void connectNodes(Set<Node> nodes) {
         Node[] nodesArray = nodes.toArray(Node[]::new);
-        for (int i = 0; i < nodes.size(); i++) {
-            for (int j = 0; j < nodes.size(); j++) {
+        for (int i = 0; i < nodes.size() / 2; i++) {
+            for (int j = nodes.size() - 1; j > nodes.size() / 2; j--) {
                 if (i == j) continue;
 
                 Node a = nodesArray[i];
@@ -73,8 +72,6 @@ public class Graph {
                 if (a.getPos().getManhattanDistance(b.getPos()) == 1) {
                     a.addDestination(b, 1);
                     b.addDestination(a, 1);
-
-                    //FIXME: Node indices `i` and `j` have been processed, don't process `j` and `i`
                 }
             }
         }

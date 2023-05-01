@@ -43,7 +43,7 @@ public class Node {
         if (block instanceof ActiveSupplierPipeBlock) {
             return iPipes.Types.ACTIVE_SUPPLIER_PIPE;
         } else if (block instanceof PassiveSupplierPipeBlock) {
-            return iPipes.Types.PASSIVE_PROVIDER_PIPE;
+            return iPipes.Types.PASSIVE_SUPPLIER_PIPE;
         } else if (block instanceof RequesterPipeBlock) {
             return iPipes.Types.REQUESTER_PIPE;
         } else if (block instanceof StoragePipeBlock) {

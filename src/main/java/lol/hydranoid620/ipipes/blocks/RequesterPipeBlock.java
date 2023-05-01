@@ -1,9 +1,7 @@
 package lol.hydranoid620.ipipes.blocks;
 
-import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
 import lol.hydranoid620.ipipes.blocks.entities.RequesterPipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -43,21 +41,12 @@ public class RequesterPipeBlock extends PipeBlock {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PipeBlockEntity(pos, state);
+        return new RequesterPipeBlockEntity(pos, state);
     }
 
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
-        return BlockRenderType.MODEL;
-    }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, iPipes.REQUESTER_PIPE_BLOCK_ENTITY, RequesterPipeBlockEntity::tick);
     }
 
-    @Override
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.REQUESTER_PIPE;
-    }
 }
