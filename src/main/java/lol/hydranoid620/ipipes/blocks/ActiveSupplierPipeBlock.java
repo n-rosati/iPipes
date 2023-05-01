@@ -36,8 +36,6 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof ActiveSupplierPipeBlockEntity) ((ActiveSupplierPipeBlockEntity) be).setShouldRebuildPaths(true);
-        //TODO: Don't need to rebuild the whole network if adjacent storage is changing
-
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
