@@ -17,7 +17,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -28,26 +27,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SuppressWarnings("deprecation")
-public class PipeBlock extends BlockWithEntity implements Waterloggable {
+public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public static final BooleanProperty NORTH = BooleanProperty.of("north");
-    public static final BooleanProperty SOUTH = BooleanProperty.of("south");
-    public static final BooleanProperty EAST = BooleanProperty.of("east");
-    public static final BooleanProperty WEST = BooleanProperty.of("west");
-    public static final BooleanProperty UP = BooleanProperty.of("up");
-    public static final BooleanProperty DOWN = BooleanProperty.of("down");
-    public static final Map<Direction, BooleanProperty> PROP_MAP = Util.make(new HashMap<>(), map -> {
-        map.put(Direction.NORTH, NORTH);
-        map.put(Direction.SOUTH, SOUTH);
-        map.put(Direction.EAST, EAST);
-        map.put(Direction.WEST, WEST);
-        map.put(Direction.UP, UP);
-        map.put(Direction.DOWN, DOWN);
-    });
 
     public PipeBlock() {
         super(FabricBlockSettings.of(Material.GLASS)
