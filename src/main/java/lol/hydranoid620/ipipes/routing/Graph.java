@@ -1,5 +1,6 @@
 package lol.hydranoid620.ipipes.routing;
 
+import lol.hydranoid620.ipipes.blocks.NetworkControllerBlock;
 import lol.hydranoid620.ipipes.blocks.PipeBlock;
 import lombok.Getter;
 import net.minecraft.state.property.BooleanProperty;
@@ -44,13 +45,21 @@ public class Graph {
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
             graph.addNode(curr);
-
             for (Direction direction : Direction.values()) {
-                if (world.getBlockState(curr.getPos()).get(BooleanProperty.of(direction.getName().toLowerCase()))) {
-                    Node newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
+                BlockPos neighbour = curr.getPos().add(direction.getVector());
+                if (world.getBlockState(neighbour).getBlock() instanceof PipeBlock || world.getBlockState(neighbour).getBlock() instanceof NetworkControllerBlock) {
+                    Node newCandidateNode = new Node(neighbour, world);
                     if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
+
+//FIXME
+//            for (Direction direction : Direction.values()) {
+//                if (world.getBlockState(curr.getPos()).get(BooleanProperty.of(direction.getName().toLowerCase()))) {
+//                    Node newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
+//                    if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
+//                }
+//            }
         }
 
         connectNodes(graph.getNodes());

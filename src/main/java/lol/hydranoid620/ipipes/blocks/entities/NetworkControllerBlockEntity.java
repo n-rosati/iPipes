@@ -99,6 +99,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             var endpoints = controllerBE.getNetworkEndpoints();
             for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
                 PathFinder.calculatePathsFromNode(node);
+                //(LinkedList<Node>) t2 = (LinkedList<Node>) node.getShortestPath().clone();
                 controllerBE.getGraph().clearPath();
             }
 
