@@ -30,8 +30,4 @@ public class PassiveSupplierPipeBlock extends SupplierPipeBlock{
         return checkType(type, iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, PassiveSupplierPipeBlockEntity::tick);
     }
 
-    @Override
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.PASSIVE_PROVIDER_PIPE;
-    }
 }

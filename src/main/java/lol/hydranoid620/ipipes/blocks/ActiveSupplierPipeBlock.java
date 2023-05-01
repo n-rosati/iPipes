@@ -3,7 +3,6 @@ package lol.hydranoid620.ipipes.blocks;
 import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
 import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -33,8 +32,4 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    @Override
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.ACTIVE_SUPPLIER_PIPE;
-    }
 }

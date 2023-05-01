@@ -22,9 +22,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressWarnings("deprecation")
 public class NetworkControllerBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;

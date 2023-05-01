@@ -56,8 +56,4 @@ public class StoragePipeBlock extends PipeBlock {
         return checkType(type, iPipes.STORAGE_PIPE_BLOCK_ENTITY, StoragePipeBlockEntity::tick);
     }
 
-    @Override
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.STORAGE_PIPE;
-    }
 }

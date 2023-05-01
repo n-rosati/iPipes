@@ -56,8 +56,4 @@ public class RequesterPipeBlock extends PipeBlock {
         return checkType(type, iPipes.REQUESTER_PIPE_BLOCK_ENTITY, RequesterPipeBlockEntity::tick);
     }
 
-    @Override
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.REQUESTER_PIPE;
-    }
 }

@@ -131,8 +131,4 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
 //
         return super.onUse(state, world, pos, player, hand, hit);
     }
-
-    public iPipes.Types getTypeEnum() {
-        return iPipes.Types.PIPE;
-    }
 }
