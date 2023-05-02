@@ -100,13 +100,18 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
         for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
-            var destinations = ((ActiveSupplierPipeBlockEntity) world.getBlockEntity(node.getPos())).getDestinations();
-            for (var targetNodes : endpoints.get(REQUESTER_PIPE)) {
-                destinations.add((LinkedList<Node>) targetNodes.getShortestPath().clone());
+            var destinations = world.getBlockEntity(node.getPos(), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
             }
 
-            for (var targetNodes : endpoints.get(STORAGE_PIPE)) {
-                destinations.add((LinkedList<Node>) targetNodes.getShortestPath().clone());
+            for (var targetNode : endpoints.get(STORAGE_PIPE)) {
+                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
             }
 
             graph.clearAllPaths();
@@ -114,9 +119,12 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
         for (var node : endpoints.get(PASSIVE_SUPPLIER_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
-            var destinations = ((PassiveSupplierPipeBlockEntity) world.getBlockEntity(node.getPos())).getDestinations();
-            for (var targetNodes : endpoints.get(REQUESTER_PIPE)) {
-                destinations.add((LinkedList<Node>) targetNodes.getShortestPath().clone());
+            var destinations =  world.getBlockEntity(node.getPos(), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
             }
 
             graph.clearAllPaths();
@@ -124,9 +132,12 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
         for (var node : endpoints.get(STORAGE_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
-            var destinations = ((StoragePipeBlockEntity) world.getBlockEntity(node.getPos())).getDestinations();
-            for (var targetNodes : endpoints.get(REQUESTER_PIPE)) {
-                destinations.add((LinkedList<Node>) targetNodes.getShortestPath().clone());
+            var destinations = world.getBlockEntity(node.getPos(), iPipes.STORAGE_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
             }
 
             graph.clearAllPaths();

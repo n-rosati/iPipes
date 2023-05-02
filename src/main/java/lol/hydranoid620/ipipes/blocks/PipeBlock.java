@@ -2,6 +2,7 @@ package lol.hydranoid620.ipipes.blocks;
 
 import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
+import lol.hydranoid620.ipipes.routing.Node;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,6 +27,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.LinkedList;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
@@ -127,8 +130,16 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-//        if (world.isClient || hand == Hand.OFF_HAND) return super.onUse(state, world, pos, player, hand, hit);
-//
+        if (hand == Hand.OFF_HAND || world.isClient) return super.onUse(state, world, pos, player, hand, hit);
+
+        var be = world.getBlockEntity(pos, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY);
+        if (be.isPresent()) {
+            for (LinkedList<Node> e : be.get().getDestinations()) {
+                iPipes.LOGGER.info("BEGIN LIST");
+                e.forEach(x -> iPipes.LOGGER.info(x.toString()));
+                iPipes.LOGGER.info("END LIST");
+            }
+        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }

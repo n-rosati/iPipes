@@ -2,23 +2,16 @@ package lol.hydranoid620.ipipes.blocks;
 
 import lol.hydranoid620.ipipes.blocks.entities.ActiveSupplierPipeBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
-import lol.hydranoid620.ipipes.routing.Node;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedList;
 
 public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockEntityProvider {
     @Nullable
@@ -38,21 +31,5 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
         be.ifPresent(ActiveSupplierPipeBlockEntity::isShouldRebuildPaths);
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (hand == Hand.OFF_HAND || world.isClient) return super.onUse(state, world, pos, player, hand, hit);
-
-        var be = world.getBlockEntity(pos, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY);
-        if (be.isPresent()) {
-            iPipes.LOGGER.info("BEGIN LIST");
-            for (LinkedList<Node> e : be.get().getDestinations()) {
-                e.forEach(x -> iPipes.LOGGER.info(x.toString()));
-            }
-            iPipes.LOGGER.info("END LIST");
-        }
-
-        return super.onUse(state, world, pos, player, hand, hit);
     }
 }

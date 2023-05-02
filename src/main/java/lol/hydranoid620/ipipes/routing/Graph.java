@@ -62,8 +62,8 @@ public class Graph {
      */
     private static void connectNodes(Set<Node> nodes) {
         Node[] nodesArray = nodes.toArray(Node[]::new);
-        for (int i = 0; i < nodes.size() / 2; i++) {
-            for (int j = nodes.size() - 1; j > nodes.size() / 2; j--) {
+        for (int i = 0; i < nodes.size(); i++) {
+            for (int j = 0; j < nodes.size(); j++) {
                 if (i == j) continue;
 
                 Node a = nodesArray[i];
