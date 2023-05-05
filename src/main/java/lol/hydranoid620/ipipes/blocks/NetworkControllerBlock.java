@@ -61,8 +61,7 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
     }
 
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        return block instanceof PipeBlock;
+        return world.getBlockState(pos).getBlock() instanceof PipeBlock;
     }
 
     @Override
