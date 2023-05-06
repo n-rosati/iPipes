@@ -62,10 +62,18 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             Types type = node.getTypeInWorld();
             if (type == null) continue;
             switch (type) {
-                case ACTIVE_SUPPLIER_PIPE -> networkEndpoints.get(ACTIVE_SUPPLIER_PIPE).add(node);
-                case PASSIVE_SUPPLIER_PIPE -> networkEndpoints.get(PASSIVE_SUPPLIER_PIPE).add(node);
-                case REQUESTER_PIPE -> networkEndpoints.get(REQUESTER_PIPE).add(node);
-                case STORAGE_PIPE -> networkEndpoints.get(STORAGE_PIPE).add(node);
+                case ACTIVE_SUPPLIER_PIPE:
+                    networkEndpoints.get(ACTIVE_SUPPLIER_PIPE).add(node);
+                    break;
+                case PASSIVE_SUPPLIER_PIPE:
+                    networkEndpoints.get(PASSIVE_SUPPLIER_PIPE).add(node);
+                    break;
+                case REQUESTER_PIPE:
+                    networkEndpoints.get(REQUESTER_PIPE).add(node);
+                    break;
+                case STORAGE_PIPE:
+                    networkEndpoints.get(STORAGE_PIPE).add(node);
+                    break;
             }
         }
     }
