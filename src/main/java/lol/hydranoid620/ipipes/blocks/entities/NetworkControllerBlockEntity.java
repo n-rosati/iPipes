@@ -4,9 +4,9 @@ import lol.hydranoid620.ipipes.iPipes;
 import lol.hydranoid620.ipipes.iPipes.Types;
 import lol.hydranoid620.ipipes.routing.Graph;
 import lol.hydranoid620.ipipes.routing.Node;
-import lol.hydranoid620.ipipes.routing.PathFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -106,50 +106,29 @@ public class NetworkControllerBlockEntity extends BlockEntity {
         var graph = controllerBE.getGraph();
         var endpoints = controllerBE.getNetworkEndpoints();
 
-        for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
-            PathFinder.calculatePathsFromNode(node);
-            var destinations = world.getBlockEntity(node.getPos(), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
-            destinations.clear();
-            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
-                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
-                pathToAdd.addLast(targetNode);
-                destinations.add(pathToAdd);
-            }
+        controllerBE.name(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        controllerBE.name(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(STORAGE_PIPE));
+        controllerBE.name(world, endpoints.get(PASSIVE_SUPPLIER_PIPE), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        controllerBE.name(world, endpoints.get(STORAGE_PIPE), iPipes.STORAGE_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
 
-            for (var targetNode : endpoints.get(STORAGE_PIPE)) {
-                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
-                pathToAdd.addLast(targetNode);
-                destinations.add(pathToAdd);
-            }
-
-            graph.clearAllPaths();
-        }
-
-        for (var node : endpoints.get(PASSIVE_SUPPLIER_PIPE)) {
-            PathFinder.calculatePathsFromNode(node);
-            var destinations =  world.getBlockEntity(node.getPos(), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
-            destinations.clear();
-            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
-                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
-                pathToAdd.addLast(targetNode);
-                destinations.add(pathToAdd);
-            }
-
-            graph.clearAllPaths();
-        }
-
-        for (var node : endpoints.get(STORAGE_PIPE)) {
-            PathFinder.calculatePathsFromNode(node);
-            var destinations = world.getBlockEntity(node.getPos(), iPipes.STORAGE_PIPE_BLOCK_ENTITY).get().getDestinations();
-            destinations.clear();
-            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
-                var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
-                pathToAdd.addLast(targetNode);
-                destinations.add(pathToAdd);
-            }
-
-            graph.clearAllPaths();
-        }
 //        be.markDirty();
+    }
+
+    private <T extends BlockEntity> void name(World world, List<Node> sourceNodes, BlockEntityType<T> sourceBE, List<Node> targetNodes) {
+        for (var sourceNode : sourceNodes) {
+            world.getBlockEntity(sourceNode.getPos(), sourceBE).ifPresent(x -> {
+                if (x instanceof IPipeNetworkEndpoint) {
+                    var destinations = ((IPipeNetworkEndpoint) x).destinations;
+                    destinations.clear();
+                    for (var targetNode : targetNodes) {
+                        var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
+                        pathToAdd.addLast(targetNode);
+                        destinations.add(pathToAdd);
+                    }
+                }
+            });
+
+            getGraph().clearAllPaths();
+        }
     }
 }
