@@ -18,8 +18,6 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity implements IPipeN
     private final List<Node> networkConnections = new ArrayList<>();
     @Setter @Getter
     private boolean shouldRebuildPaths = true;
-    @Getter
-    private ArrayList<LinkedList<Node>> destinations = new ArrayList<>();
 
     public ActiveSupplierPipeBlockEntity(BlockPos pos, BlockState state) {
         super(iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, pos, state);
@@ -27,6 +25,10 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity implements IPipeN
 
     @SuppressWarnings("unused")
     public static void tick(World world, BlockPos pos, BlockState state, ActiveSupplierPipeBlockEntity be) {
-        if (world.isClient) return;
+    }
+
+    @Override
+    public ArrayList<LinkedList<Node>> getDestinations() {
+        return destinations;
     }
 }

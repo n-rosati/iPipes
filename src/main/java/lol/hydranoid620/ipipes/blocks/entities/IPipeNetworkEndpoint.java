@@ -7,4 +7,6 @@ import java.util.LinkedList;
 
 public interface IPipeNetworkEndpoint {
     ArrayList<LinkedList<Node>> destinations = new ArrayList<>();
+
+    ArrayList<LinkedList<Node>> getDestinations();
 }

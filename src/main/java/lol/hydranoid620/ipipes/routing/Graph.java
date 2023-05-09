@@ -17,17 +17,6 @@ public class Graph {
 
     private Graph() {}
 
-    public void addNode(Node node) {
-        nodes.add(node);
-    }
-
-    public void clearAllPaths() {
-        for (var node : getNodes()) {
-            node.setDistance(Integer.MAX_VALUE);
-            node.setShortestPath(new LinkedList<>());
-        }
-    }
-
     /**
      * Traverse a pipe network to fina all connected pipes
      * @param origin Starting point to search from. Typically a {@link NetworkControllerBlockEntity}
@@ -43,10 +32,10 @@ public class Graph {
         while (!nodesToTraverse.isEmpty()) {
             Node curr = nodesToTraverse.pop();
             graph.addNode(curr);
-            var blockState = world.getBlockState(curr.getPos());
+            var blockState = world.getBlockState(curr.getBlockPos());
             if (blockState.getBlock() instanceof IPipeConnectable) {
                 for (var direction : IPipeConnectable.getConnectedDirections(blockState)) {
-                    var newCandidateNode = new Node(curr.getPos().add(direction.getVector()), world);
+                    var newCandidateNode = new Node(curr.getBlockPos().add(direction.getVector()), world);
                     if (!graph.getNodes().contains(newCandidateNode)) nodesToTraverse.push(newCandidateNode);
                 }
             }
@@ -69,11 +58,22 @@ public class Graph {
                 Node a = nodesArray[i];
                 Node b = nodesArray[j];
 
-                if (a.getPos().getManhattanDistance(b.getPos()) == 1) {
+                if (a.getBlockPos().getManhattanDistance(b.getBlockPos()) == 1) {
                     a.addDestination(b, 1);
                     b.addDestination(a, 1);
                 }
             }
+        }
+    }
+
+    private void addNode(Node node) {
+        nodes.add(node);
+    }
+
+    public void clearAllPaths() {
+        for (var node : getNodes()) {
+            node.setDistance(Integer.MAX_VALUE);
+            node.setShortestPath(new LinkedList<>());
         }
     }
 }

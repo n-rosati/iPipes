@@ -4,6 +4,7 @@ import lol.hydranoid620.ipipes.iPipes;
 import lol.hydranoid620.ipipes.iPipes.Types;
 import lol.hydranoid620.ipipes.routing.Graph;
 import lol.hydranoid620.ipipes.routing.Node;
+import lol.hydranoid620.ipipes.routing.PathFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -12,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -62,18 +62,10 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             Types type = node.getTypeInWorld();
             if (type == null) continue;
             switch (type) {
-                case ACTIVE_SUPPLIER_PIPE:
-                    networkEndpoints.get(ACTIVE_SUPPLIER_PIPE).add(node);
-                    break;
-                case PASSIVE_SUPPLIER_PIPE:
-                    networkEndpoints.get(PASSIVE_SUPPLIER_PIPE).add(node);
-                    break;
-                case REQUESTER_PIPE:
-                    networkEndpoints.get(REQUESTER_PIPE).add(node);
-                    break;
-                case STORAGE_PIPE:
-                    networkEndpoints.get(STORAGE_PIPE).add(node);
-                    break;
+                case ACTIVE_SUPPLIER_PIPE -> networkEndpoints.get(ACTIVE_SUPPLIER_PIPE).add(node);
+                case PASSIVE_SUPPLIER_PIPE -> networkEndpoints.get(PASSIVE_SUPPLIER_PIPE).add(node);
+                case REQUESTER_PIPE -> networkEndpoints.get(REQUESTER_PIPE).add(node);
+                case STORAGE_PIPE -> networkEndpoints.get(STORAGE_PIPE).add(node);
             }
         }
     }
@@ -104,27 +96,29 @@ public class NetworkControllerBlockEntity extends BlockEntity {
         if (world.isClient || !controllerBE.shouldDoAction()) return;
 
         var graph = controllerBE.getGraph();
+        controllerBE.createNetworkModel();
         var endpoints = controllerBE.getNetworkEndpoints();
 
-        controllerBE.name(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
-        controllerBE.name(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(STORAGE_PIPE));
-        controllerBE.name(world, endpoints.get(PASSIVE_SUPPLIER_PIPE), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
-        controllerBE.name(world, endpoints.get(STORAGE_PIPE), iPipes.STORAGE_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        controllerBE.assignPaths(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        controllerBE.assignPaths(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(STORAGE_PIPE));
+        controllerBE.assignPaths(world, endpoints.get(PASSIVE_SUPPLIER_PIPE), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        controllerBE.assignPaths(world, endpoints.get(STORAGE_PIPE), iPipes.STORAGE_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
 
 //        be.markDirty();
     }
 
-    private <T extends BlockEntity> void name(World world, List<Node> sourceNodes, BlockEntityType<T> sourceBE, List<Node> targetNodes) {
+    private <T extends BlockEntity> void assignPaths(World world, List<Node> sourceNodes, BlockEntityType<T> sourceBEType, List<Node> targetNodes) {
         for (var sourceNode : sourceNodes) {
-            world.getBlockEntity(sourceNode.getPos(), sourceBE).ifPresent(x -> {
-                if (x instanceof IPipeNetworkEndpoint) {
-                    var destinations = ((IPipeNetworkEndpoint) x).destinations;
-                    destinations.clear();
-                    for (var targetNode : targetNodes) {
-                        var pathToAdd = (LinkedList<Node>) targetNode.getShortestPath().clone();
-                        pathToAdd.addLast(targetNode);
-                        destinations.add(pathToAdd);
-                    }
+            PathFinder.calculatePathsFromNode(sourceNode);
+            world.getBlockEntity(sourceNode.getBlockPos(), sourceBEType).ifPresent(be -> {
+                if (!(be instanceof IPipeNetworkEndpoint)) return;
+                var destinations = ((IPipeNetworkEndpoint) be).destinations;
+                destinations.clear();
+                for (var targetNode : targetNodes) {
+                    var pathToAdd = targetNode.copyShortestPath();
+                    pathToAdd.addLast(targetNode);
+                    destinations.add(pathToAdd);
+                    iPipes.LOGGER.info(destinations.toString());
                 }
             });
 
