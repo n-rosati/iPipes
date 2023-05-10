@@ -96,9 +96,9 @@ public class NetworkControllerBlockEntity extends BlockEntity {
     public static void tick(World world, BlockPos pos, BlockState state, NetworkControllerBlockEntity controllerBE) {
         if (world.isClient || !controllerBE.shouldDoAction()) return;
 
-        var graph = controllerBE.getGraph();
         controllerBE.networkEndpoints.forEach((x, y) -> y.clear());
         controllerBE.createNetworkModel();
+        var graph = controllerBE.getGraph();
         var endpoints = controllerBE.getNetworkEndpoints();
 
         for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
