@@ -25,6 +25,7 @@ public class iPipesClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ACTIVE_SUPPLIER_PIPE_BLOCK, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(PASSIVE_SUPPLIER_PIPE_BLOCK, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(STORAGE_PIPE_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(NETWORK_CONTROLLER_BLOCK, RenderLayer.getTranslucent());
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? PIPE_FRAME_COLOUR : PIPE_GLASS_COLOUR, PIPE_BLOCK);
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> PIPE_FRAME_COLOUR, PIPE_BLOCK_ITEM);
@@ -40,5 +41,7 @@ public class iPipesClient implements ClientModInitializer {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? STORAGE_PIPE_COLOUR : PIPE_GLASS_COLOUR, STORAGE_PIPE_BLOCK);
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> STORAGE_PIPE_COLOUR, STORAGE_PIPE_BLOCK_ITEM);
+
+        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> tintIndex == 0 ? PIPE_FRAME_COLOUR : PIPE_GLASS_COLOUR, NETWORK_CONTROLLER_BLOCK);
     }
 }

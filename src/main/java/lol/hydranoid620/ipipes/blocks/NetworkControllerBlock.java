@@ -1,24 +1,18 @@
 package lol.hydranoid620.ipipes.blocks;
 
-import lol.hydranoid620.ipipes.blocks.entities.PipeBlockEntity;
+import lol.hydranoid620.ipipes.blocks.entities.NetworkControllerBlockEntity;
 import lol.hydranoid620.ipipes.iPipes;
-import lol.hydranoid620.ipipes.routing.Node;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -28,24 +22,19 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
-
 @SuppressWarnings("deprecation")
-public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
+public class NetworkControllerBlock extends BlockWithEntity implements Waterloggable, IPipeConnectable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
-    public PipeBlock() {
-        super(FabricBlockSettings.of(Material.GLASS)
-                                 .strength(0.6f, 0.6f)
-                                 .nonOpaque()
-                                 .sounds(BlockSoundGroup.STONE));
+    public NetworkControllerBlock() {
+        super(FabricBlockSettings.of(Material.STONE));
 
         setDefaultState(getStateManager().getDefaultState()
                                          .with(WATERLOGGED, false)
                                          .with(NORTH, false)
                                          .with(SOUTH, false)
                                          .with(EAST, false)
-                                         .with(WEST, false)
+                                         .with(SOUTH, false)
                                          .with(UP, false)
                                          .with(DOWN, false));
     }
@@ -71,15 +60,8 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
                    .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
-    /**
-     * checks if the {@link PipeBlock} should connect to a neighbouring block
-     * @param world the world
-     * @param pos block
-     * @return should the PipeBlock connect to the given neighbouring block
-     */
     protected boolean isConnectable(WorldAccess world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        return block instanceof PipeBlock || block instanceof NetworkControllerBlock;
+        return world.getBlockState(pos).getBlock() instanceof PipeBlock;
     }
 
     @Override
@@ -99,7 +81,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         // Base frame
-        VoxelShape shape = VoxelShapes.cuboid(4 / 16f, 4 / 16f, 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f, 1f - 4 / 16f);
+        VoxelShape shape = VoxelShapes.cuboid(2 / 16f, 2 / 16f, 2 / 16f, 1f - 2 / 16f, 1f - 2 / 16f, 1f - 2 / 16f);
 
         // Side connectors
         if (state.get(NORTH)) shape = VoxelShapes.union(shape, VoxelShapes.cuboid(4 / 16f, 4 / 16f, 0 / 16f, 1 - 4 / 16f, 1 - 4 / 16f, 4 / 16f));
@@ -115,7 +97,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PipeBlockEntity(pos, state);
+        return new NetworkControllerBlockEntity(pos, state);
     }
 
     @Override
@@ -123,23 +105,9 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
         // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
         return BlockRenderType.MODEL;
     }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, iPipes.PIPE_BLOCK_ENTITY, PipeBlockEntity::tick);
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (hand == Hand.OFF_HAND || world.isClient) return super.onUse(state, world, pos, player, hand, hit);
-
-        var be = world.getBlockEntity(pos, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY);
-        if (be.isPresent()) {
-            for (LinkedList<Node> e : be.get().getDestinations()) {
-                iPipes.LOGGER.info("BEGIN LIST");
-                e.forEach(x -> iPipes.LOGGER.info(x.toString()));
-                iPipes.LOGGER.info("END LIST");
-            }
-        }
-        return super.onUse(state, world, pos, player, hand, hit);
+        return checkType(type, iPipes.NETWORK_CONTROLLER_BLOCK_ENTITY, NetworkControllerBlockEntity::tick);
     }
 }
