@@ -42,8 +42,6 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (hand == Hand.OFF_HAND || world.isClient) return super.onUse(state, world, pos, player, hand, hit);
 
-        player.sendMessage(new LiteralText(world.getBlockEntity(pos, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations().toString()), false);
-
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }

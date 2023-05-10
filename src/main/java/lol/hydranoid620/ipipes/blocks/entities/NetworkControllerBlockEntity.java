@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,33 +97,54 @@ public class NetworkControllerBlockEntity extends BlockEntity {
         if (world.isClient || !controllerBE.shouldDoAction()) return;
 
         var graph = controllerBE.getGraph();
+        controllerBE.networkEndpoints.forEach((x, y) -> y.clear());
         controllerBE.createNetworkModel();
         var endpoints = controllerBE.getNetworkEndpoints();
 
-        controllerBE.assignPaths(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
-        controllerBE.assignPaths(world, endpoints.get(ACTIVE_SUPPLIER_PIPE), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(STORAGE_PIPE));
-        controllerBE.assignPaths(world, endpoints.get(PASSIVE_SUPPLIER_PIPE), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
-        controllerBE.assignPaths(world, endpoints.get(STORAGE_PIPE), iPipes.STORAGE_PIPE_BLOCK_ENTITY, endpoints.get(REQUESTER_PIPE));
+        for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
+            PathFinder.calculatePathsFromNode(node);
+            var destinations = world.getBlockEntity(node.getBlockPos(), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = targetNode.copyShortestPath();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
+            }
 
-//        be.markDirty();
-    }
+            for (var targetNode : endpoints.get(STORAGE_PIPE)) {
+                var pathToAdd = targetNode.copyShortestPath();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
+            }
 
-    private <T extends BlockEntity> void assignPaths(World world, List<Node> sourceNodes, BlockEntityType<T> sourceBEType, List<Node> targetNodes) {
-        for (var sourceNode : sourceNodes) {
-            PathFinder.calculatePathsFromNode(sourceNode);
-            world.getBlockEntity(sourceNode.getBlockPos(), sourceBEType).ifPresent(be -> {
-                if (!(be instanceof IPipeNetworkEndpoint)) return;
-                var destinations = ((IPipeNetworkEndpoint) be).destinations;
-                destinations.clear();
-                for (var targetNode : targetNodes) {
-                    var pathToAdd = targetNode.copyShortestPath();
-                    pathToAdd.addLast(targetNode);
-                    destinations.add(pathToAdd);
-                    iPipes.LOGGER.info(destinations.toString());
-                }
-            });
-
-            getGraph().clearAllPaths();
+            graph.clearAllPaths();
         }
+
+        for (var node : endpoints.get(PASSIVE_SUPPLIER_PIPE)) {
+            PathFinder.calculatePathsFromNode(node);
+            var destinations =  world.getBlockEntity(node.getBlockPos(), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = targetNode.copyShortestPath();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
+            }
+
+            graph.clearAllPaths();
+        }
+
+        for (var node : endpoints.get(STORAGE_PIPE)) {
+            PathFinder.calculatePathsFromNode(node);
+            var destinations = world.getBlockEntity(node.getBlockPos(), iPipes.STORAGE_PIPE_BLOCK_ENTITY).get().getDestinations();
+            destinations.clear();
+            for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
+                var pathToAdd = targetNode.copyShortestPath();
+                pathToAdd.addLast(targetNode);
+                destinations.add(pathToAdd);
+            }
+
+            graph.clearAllPaths();
+        }
+//        be.markDirty();
     }
 }

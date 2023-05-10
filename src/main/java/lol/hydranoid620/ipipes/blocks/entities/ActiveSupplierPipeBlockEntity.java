@@ -29,6 +29,6 @@ public class ActiveSupplierPipeBlockEntity extends BlockEntity implements IPipeN
 
     @Override
     public ArrayList<LinkedList<Node>> getDestinations() {
-        return destinations;
+        return this.destinations;
     }
 }
