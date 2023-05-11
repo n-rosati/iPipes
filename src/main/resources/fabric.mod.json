@@ -16,6 +16,9 @@
   "icon": "assets/iPipes/icon.png",
   "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "lol.hydranoid620.ipipes.datagen.DataGeneration"
+    ],
     "client": [
       "lol.hydranoid620.ipipes.client.iPipesClient"
     ],
