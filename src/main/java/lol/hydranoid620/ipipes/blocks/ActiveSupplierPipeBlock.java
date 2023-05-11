@@ -33,7 +33,6 @@ public class ActiveSupplierPipeBlock extends SupplierPipeBlock implements BlockE
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         var be = world.getBlockEntity(pos, iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY);
-        be.ifPresent(ActiveSupplierPipeBlockEntity::isShouldRebuildPaths);
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
