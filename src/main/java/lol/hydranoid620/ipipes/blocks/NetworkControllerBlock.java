@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -27,7 +28,10 @@ public class NetworkControllerBlock extends BlockWithEntity implements Waterlogg
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public NetworkControllerBlock() {
-        super(FabricBlockSettings.of(Material.STONE));
+        super(FabricBlockSettings.of(Material.STONE)
+                                 .strength(2.5f, 6.0f)
+                                 .nonOpaque()
+                                 .sounds(BlockSoundGroup.STONE));
 
         setDefaultState(getStateManager().getDefaultState()
                                          .with(WATERLOGGED, false)

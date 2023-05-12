@@ -36,7 +36,7 @@ public class PipeBlock extends BlockWithEntity implements Waterloggable, IPipeCo
 
     public PipeBlock() {
         super(FabricBlockSettings.of(Material.GLASS)
-                                 .strength(0.6f, 0.6f)
+                                 .strength(0.1f, 4.0f)
                                  .nonOpaque()
                                  .sounds(BlockSoundGroup.STONE));
 
