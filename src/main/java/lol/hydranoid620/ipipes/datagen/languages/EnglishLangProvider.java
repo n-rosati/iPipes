@@ -1,4 +1,4 @@
-package lol.hydranoid620.ipipes.datagen;
+package lol.hydranoid620.ipipes.datagen.languages;
 
 import lol.hydranoid620.ipipes.iPipes;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
