@@ -96,11 +96,15 @@ public class NetworkControllerBlockEntity extends BlockEntity {
     public static void tick(World world, BlockPos pos, BlockState state, NetworkControllerBlockEntity controllerBE) {
         if (world.isClient || !controllerBE.shouldDoAction()) return;
 
+        // Clear old stuff
         controllerBE.networkEndpoints.forEach((x, y) -> y.clear());
+
+        // Get all the current endpoints in the graph
         controllerBE.createNetworkModel();
         var graph = controllerBE.getGraph();
         var endpoints = controllerBE.getNetworkEndpoints();
 
+        // Map Active Suppliers
         for (var node : endpoints.get(ACTIVE_SUPPLIER_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
             var destinations = world.getBlockEntity(node.getBlockPos(), iPipes.ACTIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
@@ -120,6 +124,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             graph.clearAllPaths();
         }
 
+        // Map Passive Suppliers
         for (var node : endpoints.get(PASSIVE_SUPPLIER_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
             var destinations =  world.getBlockEntity(node.getBlockPos(), iPipes.PASSIVE_SUPPLIER_PIPE_BLOCK_ENTITY).get().getDestinations();
@@ -133,6 +138,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             graph.clearAllPaths();
         }
 
+        // Map Storage pipes
         for (var node : endpoints.get(STORAGE_PIPE)) {
             PathFinder.calculatePathsFromNode(node);
             var destinations = world.getBlockEntity(node.getBlockPos(), iPipes.STORAGE_PIPE_BLOCK_ENTITY).get().getDestinations();
