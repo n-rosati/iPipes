@@ -110,13 +110,13 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             destinations.clear();
             for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
                 var pathToAdd = targetNode.copyShortestPath();
-                pathToAdd.addLast(targetNode);
+                pathToAdd.addLast(new Node(targetNode.getBlockPos(), targetNode.getWorld()));
                 destinations.add(pathToAdd);
             }
 
             for (var targetNode : endpoints.get(STORAGE_PIPE)) {
                 var pathToAdd = targetNode.copyShortestPath();
-                pathToAdd.addLast(targetNode);
+                pathToAdd.addLast(new Node(targetNode.getBlockPos(), targetNode.getWorld()));
                 destinations.add(pathToAdd);
             }
 
@@ -130,7 +130,7 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             destinations.clear();
             for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
                 var pathToAdd = targetNode.copyShortestPath();
-                pathToAdd.addLast(targetNode);
+                pathToAdd.addLast(new Node(targetNode.getBlockPos(), targetNode.getWorld()));
                 destinations.add(pathToAdd);
             }
 
@@ -144,12 +144,15 @@ public class NetworkControllerBlockEntity extends BlockEntity {
             destinations.clear();
             for (var targetNode : endpoints.get(REQUESTER_PIPE)) {
                 var pathToAdd = targetNode.copyShortestPath();
-                pathToAdd.addLast(targetNode);
+                pathToAdd.addLast(new Node(targetNode.getBlockPos(), targetNode.getWorld()));
                 destinations.add(pathToAdd);
             }
 
             graph.clearAllPaths();
         }
+        // PathFinder.calculatePathsFromNode(endpoints.get(Types.ACTIVE_SUPPLIER_PIPE).get(0))
+
+
 //        be.markDirty();
     }
 }
