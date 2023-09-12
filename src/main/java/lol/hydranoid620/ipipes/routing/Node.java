@@ -17,17 +17,16 @@ import java.util.Objects;
 /**
  * A pipe piece represented as a Node for use in a graph
  */
+@Getter
 @ToString
 public class Node {
-    @Getter
-    private World world;
-    @Getter
-    private BlockPos blockPos;
-    @Getter @Setter @ToString.Exclude
+    private final World world;
+    private final BlockPos blockPos;
+    @Setter @ToString.Exclude
     private LinkedList<Node> shortestPath = new LinkedList<>();
-    @Getter @Setter
+    @Setter
     private int distance = Integer.MAX_VALUE;
-    @Getter @ToString.Exclude
+    @ToString.Exclude
     Map<Node, Integer> adjacentNodes = new HashMap<>();
 
     public Node(BlockPos blockPos, World world) {

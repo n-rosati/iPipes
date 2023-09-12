@@ -5,30 +5,34 @@ import lol.hydranoid620.ipipes.iPipes.Types;
 import lol.hydranoid620.ipipes.routing.Graph;
 import lol.hydranoid620.ipipes.routing.Node;
 import lol.hydranoid620.ipipes.routing.PathFinder;
+import lombok.Getter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static lol.hydranoid620.ipipes.iPipes.Types.*;
 
 public class NetworkControllerBlockEntity extends BlockEntity {
-    private static final int ACTIONS_PER_SECOND = 2;
+    private static final int ACTIONS_PER_SECOND = 1;
     private int ticksUntilAction = 20;
     private Graph graph;
+    @Getter
     private final Map<Types, List<Node>> networkEndpoints = Map.of(
             ACTIVE_SUPPLIER_PIPE, new ArrayList<>(),
             PASSIVE_SUPPLIER_PIPE, new ArrayList<>(),
             REQUESTER_PIPE, new ArrayList<>(),
             STORAGE_PIPE, new ArrayList<>()
     );
+
+    @Getter
+    private final Map<Node, List<Node>> connections = new HashMap<>();
 
     /************************/
 
@@ -54,10 +58,6 @@ public class NetworkControllerBlockEntity extends BlockEntity {
         return this.graph;
     }
 
-    public Map<Types, List<Node>> getNetworkEndpoints() {
-        return this.networkEndpoints;
-    }
-
     private void findEndpoints() {
         for (Node node : getGraph().getNodes()) {
             Types type = node.getTypeInWorld();
@@ -73,11 +73,10 @@ public class NetworkControllerBlockEntity extends BlockEntity {
 
     private void createNetworkModel() {
         this.graph = Graph.create(this.getPos(), this.getWorld());
-
         findEndpoints();
     }
 
-    public boolean shouldDoAction() {
+    private boolean shouldDoAction() {
         boolean retVal = false;
         if (this.ticksUntilAction <= 0) {
             this.ticksUntilAction = 20 / ACTIONS_PER_SECOND;
